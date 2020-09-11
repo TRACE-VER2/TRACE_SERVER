@@ -1,2 +1,2 @@
 # TRACE-SERVER-STUDY
-The practice github for Trace 2.0 project
+The repository for the server of Trace 2.0 project
