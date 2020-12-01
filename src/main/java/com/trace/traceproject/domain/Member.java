@@ -30,7 +30,10 @@ public class Member extends BaseTimeEntity{
     @Column(unique = true)
     private String phoneNum;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "Preference_Member",
+            joinColumns =@JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "preference_id"))
     private List<Preference> preferences = new ArrayList<>();
 
 }
