@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum PreferenceStatus {
+public enum Tag {
     SUNNY("SUNNY", "햇살가득"),
     NO_BUG("NO_BUG", "벌레없음"),
     QUIET("QUIET", "조용함"),

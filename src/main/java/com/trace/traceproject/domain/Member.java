@@ -1,12 +1,13 @@
 package com.trace.traceproject.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,10 +32,19 @@ public class Member extends BaseTimeEntity{
     private String phoneNum;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "Preference_Member",
+    @JoinTable(name = "member_preference",
             joinColumns =@JoinColumn(name = "member_id"),
             inverseJoinColumns = @JoinColumn(name = "preference_id"))
-    private List<Preference> preferences = new ArrayList<>();
+    private Set<Preference> preferences = new HashSet<>();
 
+    @Builder
+    public Member(Long id, String userId, String password, String name, String email, String phoneNum) {
+        this.id = id;
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.phoneNum = phoneNum;
+    }
 }
 

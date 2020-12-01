@@ -1,6 +1,6 @@
 package com.trace.traceproject.domain;
 
-import com.trace.traceproject.domain.enums.PreferenceStatus;
+import com.trace.traceproject.domain.enums.Tag;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +17,10 @@ public class Preference extends BaseTimeEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private PreferenceStatus tag;
+    @Column(unique = true)
+    private Tag tag;
+
+    public Preference(Tag tag) {
+        this.tag = tag;
+    }
 }
