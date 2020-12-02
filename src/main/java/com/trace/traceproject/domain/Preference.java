@@ -4,12 +4,14 @@ import com.trace.traceproject.domain.enums.Tag;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"tag"})
 public class Preference extends BaseTimeEntity {
     @Id
     @GeneratedValue

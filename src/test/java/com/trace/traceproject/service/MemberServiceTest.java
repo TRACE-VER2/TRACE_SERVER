@@ -4,6 +4,7 @@ import com.trace.traceproject.domain.Member;
 import com.trace.traceproject.domain.Preference;
 import com.trace.traceproject.domain.enums.Tag;
 import com.trace.traceproject.dto.MemberJoinDto;
+import com.trace.traceproject.dto.MemberUpdateDto;
 import com.trace.traceproject.repository.PreferenceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -40,7 +42,7 @@ class MemberServiceTest {
         preferenceRepository.save(preference5);
     }
 
-    @Test()
+    @Test
     public void 회원가입() throws Exception {
         //given
         MemberJoinDto memberJoinDto = new MemberJoinDto("syleemk", "1234", "syleemk@naver.com", "이수영", "01012341234");
@@ -70,5 +72,28 @@ class MemberServiceTest {
 
         //then
         assertThrows(IllegalStateException.class, () -> memberService.join(memberJoinDto2));
+    }
+
+    @Test
+    public void 회원정보수정() throws Exception {
+        //given
+        MemberJoinDto memberJoinDto = new MemberJoinDto("syleemk", "1234", "syleemk@naver.com", "이수영", "01012341234");
+        List<String> preferences = memberJoinDto.getPreferences();
+        preferences.add("CHEAP");
+        preferences.add("SUNNY");
+        memberService.join(memberJoinDto);
+
+        //when
+        MemberUpdateDto memberUpdateDto = new MemberUpdateDto("syleemk","01034564567");
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("QUIET");
+        arrayList.add("LARGE");
+        memberUpdateDto.setPreferences(arrayList);
+        memberService.update(memberUpdateDto);
+
+        //then
+        Member findMember = memberService.findByUserId(memberUpdateDto.getUserId());
+        assertThat(findMember.getPhoneNum()).isEqualTo(memberUpdateDto.getPhoneNum());
+        findMember.getPreferences().forEach(System.out::println);
     }
 }

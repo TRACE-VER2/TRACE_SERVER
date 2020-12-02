@@ -46,5 +46,14 @@ public class Member extends BaseTimeEntity{
         this.email = email;
         this.phoneNum = phoneNum;
     }
+
+    /**
+     * 회원 정보 변경
+     */
+    public void changeUserInfo(String phoneNum, Set<Preference> preferences){
+        this.phoneNum = phoneNum;
+        this.preferences = preferences;
+    }
+
 }
 
