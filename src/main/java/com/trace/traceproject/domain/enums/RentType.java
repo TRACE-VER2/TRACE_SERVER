@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum RentStatus {
+public enum RentType {
     KEY_MONEY("KEY_MONEY","전세"),
     MONTHLY("MONTHLY", "월세");
 

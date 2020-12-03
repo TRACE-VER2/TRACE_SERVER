@@ -38,8 +38,7 @@ public class Member extends BaseTimeEntity{
     private Set<Preference> preferences = new HashSet<>();
 
     @Builder
-    public Member(Long id, String userId, String password, String name, String email, String phoneNum) {
-        this.id = id;
+    public Member(String userId, String password, String name, String email, String phoneNum) {
         this.userId = userId;
         this.password = password;
         this.name = name;

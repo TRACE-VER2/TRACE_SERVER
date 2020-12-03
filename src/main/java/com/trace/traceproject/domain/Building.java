@@ -1,6 +1,7 @@
 package com.trace.traceproject.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,11 @@ public class Building extends BaseTimeEntity{
     private String address;
 
     private LocalDateTime completionDate;
+
+    @Builder
+    public Building(Location location, String address, LocalDateTime completionDate) {
+        this.location = location;
+        this.address = address;
+        this.completionDate = completionDate;
+    }
 }

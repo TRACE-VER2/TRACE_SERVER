@@ -3,10 +3,8 @@ package com.trace.traceproject.domain;
 import com.trace.traceproject.domain.enums.BugStatus;
 import com.trace.traceproject.domain.enums.GoodBadStatus;
 import com.trace.traceproject.domain.enums.NoiseStatus;
-import com.trace.traceproject.domain.enums.RentStatus;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.trace.traceproject.domain.enums.RentType;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id","rentType"})
 public class Review extends BaseTimeEntity{
     @Id
     @GeneratedValue
@@ -27,11 +26,13 @@ public class Review extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "building_id")
     private Building building;
+    
+    private String roomNumber; //호수
 
     private String image; // 방 사진
 
     @Enumerated(EnumType.STRING)
-    private RentStatus rentType; //전세, 월세 여부
+    private RentType rentType; //전세, 월세 여부
 
     private int deposit; //전세, 월세 보증금
 
@@ -79,4 +80,31 @@ public class Review extends BaseTimeEntity{
     private LocalDateTime durationStart; //유지 시작 기간
 
     private LocalDateTime durationEnd;// 유지 완료 기간
+
+    @Builder
+    public Review(Member member, Building building, String roomNumber, String image, RentType rentType, int deposit, int monthlyRent, int score, int area, LocalDateTime livingStart, LocalDateTime livingEnd, boolean remodeled, GoodBadStatus waterPressure, GoodBadStatus lighting, GoodBadStatus frozen, BugStatus bug, NoiseStatus noise, String option, String nearBy, String trueStory, String contact, LocalDateTime durationStart, LocalDateTime durationEnd) {
+        this.member = member;
+        this.building = building;
+        this.roomNumber = roomNumber;
+        this.image = image;
+        this.rentType = rentType;
+        this.deposit = deposit;
+        this.monthlyRent = monthlyRent;
+        this.score = score;
+        this.area = area;
+        this.livingStart = livingStart;
+        this.livingEnd = livingEnd;
+        this.remodeled = remodeled;
+        this.waterPressure = waterPressure;
+        this.lighting = lighting;
+        this.frozen = frozen;
+        this.bug = bug;
+        this.noise = noise;
+        this.option = option;
+        this.nearBy = nearBy;
+        this.trueStory = trueStory;
+        this.contact = contact;
+        this.durationStart = durationStart;
+        this.durationEnd = durationEnd;
+    }
 }

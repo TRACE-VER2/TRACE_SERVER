@@ -35,7 +35,7 @@ public class MemberService {
     }
 
     private void validateDuplicateMember(MemberJoinDto memberJoinDto) {
-        if (memberRepository.findByNameAndPhoneNum(memberJoinDto.getName(), memberJoinDto.getPhoneNum()) != null) {
+        if (memberRepository.findByNameAndPhoneNum(memberJoinDto.getName(), memberJoinDto.getPhoneNum()).isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }
@@ -45,16 +45,17 @@ public class MemberService {
     }
 
     Member findByUserId(String userId) {
-        return memberRepository.findByUserId(userId);
+        return memberRepository.findByUserId(userId)
+                .orElseThrow(()->new IllegalStateException("유효하지 않은 회원 id입니다."));
     }
 
     //회원 정보 수정
     @Transactional
     public void update(MemberUpdateDto memberUpdateDto) {
-        Member member = memberRepository.findByUserId(memberUpdateDto.getUserId());
-        System.out.println("memberkk = " + member);
+        Member member = memberRepository.findByUserId(memberUpdateDto.getUserId())
+                .orElseThrow(()->new IllegalStateException("유효하지 않은 회원 id입니다."));
         member.changeUserInfo(memberUpdateDto.getPhoneNum(),
-                (HashSet<Preference>)memberUpdateDto.getPreferences().stream()
+                memberUpdateDto.getPreferences().stream()
                             .map(Tag::valueOf)
                             .map(preferenceRepository::findByTag)
                             .collect(Collectors.toSet()));
