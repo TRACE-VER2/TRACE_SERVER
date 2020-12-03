@@ -9,8 +9,13 @@ import com.trace.traceproject.repository.BuildingRepository;
 import com.trace.traceproject.repository.MemberRepository;
 import com.trace.traceproject.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -47,4 +52,14 @@ public class ReviewService {
         review.changeReview(reviewUpdateDto);
     }
 
+    //회원이 쓴 리뷰 목록 조회(페이징 처리)
+    //컨트롤러단에서 PageRequest 생성해서 전달할필요없음 (알아서 매핑해줌) default설정만 해주기
+    public Slice<Review> findMemberReview(String userId, Pageable pageable){
+        return reviewRepository.findByUserId(userId, pageable);
+    }
+
+    //건물에 달린 리뷰 목록 조회(페이징 처리)
+    public Slice<Review> findBuildingReview(Long buildingId, Pageable pageable) {
+        return reviewRepository.findByBuildingId(buildingId, pageable);
+    }
 }

@@ -1,7 +1,6 @@
 package com.trace.traceproject.service;
 
 import com.trace.traceproject.domain.Member;
-import com.trace.traceproject.domain.Preference;
 import com.trace.traceproject.dto.MemberUpdateDto;
 import com.trace.traceproject.domain.enums.Tag;
 import com.trace.traceproject.dto.MemberJoinDto;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Service
