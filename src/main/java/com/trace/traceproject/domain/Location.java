@@ -17,5 +17,6 @@ public class Location extends BaseTimeEntity{
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(unique = true)
     private LocationStatus name;
 }

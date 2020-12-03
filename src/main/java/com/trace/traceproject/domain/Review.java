@@ -4,6 +4,7 @@ import com.trace.traceproject.domain.enums.BugStatus;
 import com.trace.traceproject.domain.enums.GoodBadStatus;
 import com.trace.traceproject.domain.enums.NoiseStatus;
 import com.trace.traceproject.domain.enums.RentType;
+import com.trace.traceproject.dto.ReviewUpdateDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -82,7 +83,11 @@ public class Review extends BaseTimeEntity{
     private LocalDateTime durationEnd;// 유지 완료 기간
 
     @Builder
-    public Review(Member member, Building building, String roomNumber, String image, RentType rentType, int deposit, int monthlyRent, int score, int area, LocalDateTime livingStart, LocalDateTime livingEnd, boolean remodeled, GoodBadStatus waterPressure, GoodBadStatus lighting, GoodBadStatus frozen, BugStatus bug, NoiseStatus noise, String option, String nearBy, String trueStory, String contact, LocalDateTime durationStart, LocalDateTime durationEnd) {
+    public Review(Member member, Building building, String roomNumber, String image, RentType rentType,
+                  int deposit, int monthlyRent, int score, int area, LocalDateTime livingStart, LocalDateTime livingEnd,
+                  boolean remodeled, GoodBadStatus waterPressure, GoodBadStatus lighting, GoodBadStatus frozen, BugStatus bug,
+                  NoiseStatus noise, String option, String nearBy, String trueStory, String contact,
+                  LocalDateTime durationStart, LocalDateTime durationEnd) {
         this.member = member;
         this.building = building;
         this.roomNumber = roomNumber;
@@ -106,5 +111,34 @@ public class Review extends BaseTimeEntity{
         this.contact = contact;
         this.durationStart = durationStart;
         this.durationEnd = durationEnd;
+    }
+
+    /**
+     * 리뷰 수정
+     * 파라미터로 다 받으면 재사용성측면에서 좋지만
+     * 너무 많다면 의존성 생기더라도 dto로 전달하는 것 고려
+     */
+    public void changeReview(ReviewUpdateDto reviewUpdateDto) {
+        this.roomNumber = reviewUpdateDto.getRoomNumer();
+        //this.image = reviewUpdateDto.getImage();
+        this.rentType = RentType.valueOf(reviewUpdateDto.getRentType());
+        this.deposit = reviewUpdateDto.getDeposit();
+        this.monthlyRent = reviewUpdateDto.getMonthlyRent();
+        this.score = reviewUpdateDto.getScore();
+        this.area = reviewUpdateDto.getArea();
+        this.livingStart = reviewUpdateDto.getLivingStart();
+        this.livingEnd = reviewUpdateDto.getLivingEnd();
+        this.remodeled = reviewUpdateDto.isRemodeled();
+        this.waterPressure = GoodBadStatus.valueOf(reviewUpdateDto.getWaterPressure());
+        this.lighting = GoodBadStatus.valueOf(reviewUpdateDto.getLighting());
+        this.frozen = GoodBadStatus.valueOf(reviewUpdateDto.getFrozen());
+        this.bug = BugStatus.valueOf(reviewUpdateDto.getBug());
+        this.noise = NoiseStatus.valueOf(reviewUpdateDto.getNoise());
+        this.option = reviewUpdateDto.getOption();
+        this.nearBy = reviewUpdateDto.getNearBy();
+        this.trueStory = reviewUpdateDto.getTrueStory();
+        this.contact = reviewUpdateDto.getContact();
+        this.durationStart = reviewUpdateDto.getDurationStart();
+        this.durationEnd = reviewUpdateDto.getDurationEnd();
     }
 }
