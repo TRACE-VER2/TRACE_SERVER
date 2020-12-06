@@ -21,12 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
+//@Rollback(value = false)
 class ReviewServiceTest {
 
     @Autowired ReviewService reviewService;
@@ -58,7 +59,7 @@ class ReviewServiceTest {
                 .option("냉장고")
                 .build();
 
-        Long reviewId = reviewService.save(reviewSaveDto);
+        Long reviewId = reviewService.save(Collections.emptyList(), reviewSaveDto);
         Review review = reviewService.findById(reviewId);
 
         //then
@@ -87,7 +88,7 @@ class ReviewServiceTest {
                 .option("냉장고")
                 .build();
 
-        Long reviewId = reviewService.save(reviewSaveDto);
+        Long reviewId = reviewService.save(Collections.emptyList(), reviewSaveDto);
 
         ReviewUpdateDto reviewUpdateDto = ReviewUpdateDto.builder()
                 .reviewId(reviewId)

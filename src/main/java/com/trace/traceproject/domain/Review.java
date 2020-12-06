@@ -4,15 +4,20 @@ import com.trace.traceproject.domain.enums.BugStatus;
 import com.trace.traceproject.domain.enums.GoodBadStatus;
 import com.trace.traceproject.domain.enums.NoiseStatus;
 import com.trace.traceproject.domain.enums.RentType;
+import com.trace.traceproject.dto.ReviewInfo;
 import com.trace.traceproject.dto.ReviewUpdateDto;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 @ToString(of = {"id","rentType"})
 public class Review extends BaseTimeEntity{
     @Id
@@ -30,7 +35,8 @@ public class Review extends BaseTimeEntity{
     
     private String roomNumber; //호수
 
-    private String image; // 방 사진
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>(); //방 사진
 
     @Enumerated(EnumType.STRING)
     private RentType rentType; //전세, 월세 여부
@@ -82,35 +88,47 @@ public class Review extends BaseTimeEntity{
 
     private LocalDateTime durationEnd;// 유지 완료 기간
 
-    @Builder
-    public Review(Member member, Building building, String roomNumber, String image, RentType rentType,
-                  int deposit, int monthlyRent, int score, int area, LocalDateTime livingStart, LocalDateTime livingEnd,
-                  boolean remodeled, GoodBadStatus waterPressure, GoodBadStatus lighting, GoodBadStatus frozen, BugStatus bug,
-                  NoiseStatus noise, String option, String nearBy, String trueStory, String contact,
-                  LocalDateTime durationStart, LocalDateTime durationEnd) {
-        this.member = member;
-        this.building = building;
-        this.roomNumber = roomNumber;
-        this.image = image;
-        this.rentType = rentType;
-        this.deposit = deposit;
-        this.monthlyRent = monthlyRent;
-        this.score = score;
-        this.area = area;
-        this.livingStart = livingStart;
-        this.livingEnd = livingEnd;
-        this.remodeled = remodeled;
-        this.waterPressure = waterPressure;
-        this.lighting = lighting;
-        this.frozen = frozen;
-        this.bug = bug;
-        this.noise = noise;
-        this.option = option;
-        this.nearBy = nearBy;
-        this.trueStory = trueStory;
-        this.contact = contact;
-        this.durationStart = durationStart;
-        this.durationEnd = durationEnd;
+    /**
+     * 연관관계 편의 메서드
+     */
+    public void addImage(Image image) {
+        images.add(image);
+        image.setReview(this);
+    }
+
+    /**
+     * 생성 메서드
+     */
+    public static Review createReview(ReviewInfo info, Member member, Building building, List<Image> images) {
+        Review review = new Review();
+        review.member = member;
+        review.building = building;
+        review.roomNumber = info.getRoomNumber();
+        review.rentType = info.getRentType();
+        review.deposit = info.getDeposit();
+        review.monthlyRent = info.getMonthlyRent();
+        review.score = info.getScore();
+        review.area = info.getArea();
+        review.livingStart = info.getLivingStart();
+        review.livingEnd = info.getLivingEnd();
+        review.remodeled = info.isRemodeled();
+        review.waterPressure = info.getWaterPressure();
+        review.lighting = info.getLighting();
+        review.frozen = info.getFrozen();
+        review.bug = info.getBug();
+        review.noise = info.getNoise();
+        review.option = info.getOption();
+        review.nearBy = info.getNearBy();
+        review.trueStory = info.getTrueStory();
+        review.contact = info.getContact();
+        review.durationStart = info.getDurationStart();
+        review.durationEnd = info.getDurationEnd();
+
+        for (Image image : images) {
+            review.addImage(image); //연관관계 편의 메서드
+        }
+
+        return review;
     }
 
     /**

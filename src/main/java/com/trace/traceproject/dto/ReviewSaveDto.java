@@ -10,8 +10,11 @@ import com.trace.traceproject.domain.enums.RentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -44,6 +47,31 @@ public class ReviewSaveDto {
         return Review.builder()
                 .member(member)
                 .building(building)
+                .roomNumber(roomNumer)
+                .rentType(RentType.valueOf(rentType))
+                .deposit(deposit)
+                .monthlyRent(monthlyRent)
+                .score(score)
+                .area(area)
+                .livingStart(livingStart)
+                .livingEnd(livingEnd)
+                .remodeled(remodeled)
+                .waterPressure(GoodBadStatus.valueOf(waterPressure))
+                .lighting(GoodBadStatus.valueOf(lighting))
+                .bug(BugStatus.valueOf(bug))
+                .noise(NoiseStatus.valueOf(noise))
+                .option(option)
+                .nearBy(nearBy)
+                .trueStory(trueStory)
+                .contact(contact)
+                .durationStart(durationStart)
+                .durationEnd(durationEnd)
+                .build();
+    }
+
+    public ReviewInfo getReviewInfo() {
+        return ReviewInfo.builder()
+                .roomNumber(roomNumer)
                 .rentType(RentType.valueOf(rentType))
                 .deposit(deposit)
                 .monthlyRent(monthlyRent)

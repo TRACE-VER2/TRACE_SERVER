@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: local
   datasource:
     url: jdbc:h2:tcp://localhost/~/trace_server
     username: sa
@@ -7,6 +9,10 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
+
+  servlet:
+    multipart:
+      enabled: true
 
   jpa:
     hibernate:
