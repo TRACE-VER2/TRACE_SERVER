@@ -18,7 +18,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Slice<Review> findByUserId(@Param("userId") String userId, Pageable pageable);
 
     //건물별 리뷰 조회
-    @EntityGraph(attributePaths = {"member"})
+    @EntityGraph(attributePaths = {"member", "images"})
     @Query("select r from Review r where r.building.id = :buildingId")
     Slice<Review> findByBuildingId(@Param("buildingId") Long buildingId, Pageable pageable);
 }
