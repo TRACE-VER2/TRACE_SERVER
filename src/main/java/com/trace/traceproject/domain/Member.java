@@ -1,5 +1,6 @@
 package com.trace.traceproject.domain;
 
+import com.trace.traceproject.domain.enums.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +37,12 @@ public class Member extends BaseTimeEntity{
             joinColumns =@JoinColumn(name = "member_id"),
             inverseJoinColumns = @JoinColumn(name = "preference_id"))
     private Set<Preference> preferences = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "role",
+            joinColumns = @JoinColumn(name = "member_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
     @Builder
     public Member(String userId, String password, String name, String email, String phoneNum) {

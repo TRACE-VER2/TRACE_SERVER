@@ -22,7 +22,7 @@ public class InitDb implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Member member = new Member("syleemk", "1234", "이글루", "syleemk@naver.com", "01012341234");
+        Member member = new Member("minso", "1234", "이승준", "minso@naver.com", "01012344567");
         memberRepository.save(member);
         Building building = new Building(null, "성북구", LocalDateTime.now());
         buildingRepository.save(building);
