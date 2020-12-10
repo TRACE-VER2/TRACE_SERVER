@@ -5,6 +5,7 @@ import com.trace.traceproject.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,10 +41,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable() //rest api이므로 csrf보안이 필요없으므로 diable
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //jwt 토큰기반 인증이므로 세션 필요없기에 생성안함
                 .and()
-                .authorizeRequests() //요청에 대한 사용권한 체크
-                .antMatchers("/api/v1/members/login", "/api/v1/members/join").permitAll() //가입 및 인증 주소는 누구나 접근 가능
-                .anyRequest().hasRole("USER") //나머지 요청은 모두 인증된 회원만 접근 가능
+                    .authorizeRequests() //요청에 대한 사용권한 체크
+                        .antMatchers("/api/v1/members/login", "/api/v1/members/join").permitAll() //가입 및 인증 주소는 누구나 접근 가능
+                        .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
+                    .antMatchers("/api/v1/images/**").hasRole("ADMIN") //접근권한 테스트용 설정
+                    .anyRequest().hasRole("USER") //나머지 요청은 모두 인증된 회원만 접근 가능
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                    .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
+                .and()
+                    .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .and()
+                    .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
     }
 }
