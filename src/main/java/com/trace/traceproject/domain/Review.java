@@ -5,7 +5,7 @@ import com.trace.traceproject.domain.enums.GoodBadStatus;
 import com.trace.traceproject.domain.enums.NoiseStatus;
 import com.trace.traceproject.domain.enums.RentType;
 import com.trace.traceproject.dto.ReviewInfo;
-import com.trace.traceproject.dto.ReviewUpdateDto;
+import com.trace.traceproject.dto.request.ReviewUpdateDto;
 import lombok.*;
 
 import javax.persistence.*;

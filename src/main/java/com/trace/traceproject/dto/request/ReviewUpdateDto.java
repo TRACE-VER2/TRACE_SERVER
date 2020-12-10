@@ -1,4 +1,4 @@
-package com.trace.traceproject.dto;
+package com.trace.traceproject.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

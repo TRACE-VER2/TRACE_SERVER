@@ -1,4 +1,4 @@
-package com.trace.traceproject.dto;
+package com.trace.traceproject.dto.request;
 
 import com.trace.traceproject.domain.Building;
 import com.trace.traceproject.domain.Member;
@@ -7,6 +7,7 @@ import com.trace.traceproject.domain.enums.BugStatus;
 import com.trace.traceproject.domain.enums.GoodBadStatus;
 import com.trace.traceproject.domain.enums.NoiseStatus;
 import com.trace.traceproject.domain.enums.RentType;
+import com.trace.traceproject.dto.ReviewInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

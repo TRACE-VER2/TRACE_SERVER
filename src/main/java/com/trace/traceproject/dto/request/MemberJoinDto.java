@@ -1,12 +1,14 @@
-package com.trace.traceproject.dto;
+package com.trace.traceproject.dto.request;
 
 import com.trace.traceproject.domain.Member;
+import com.trace.traceproject.domain.enums.Role;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Data
+@NoArgsConstructor
 public class MemberJoinDto {
     private String userId;
     private String password;

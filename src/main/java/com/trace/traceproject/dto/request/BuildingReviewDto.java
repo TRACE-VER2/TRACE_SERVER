@@ -1,4 +1,4 @@
-package com.trace.traceproject.dto;
+package com.trace.traceproject.dto.request;
 
 import com.trace.traceproject.domain.Image;
 import com.trace.traceproject.domain.Review;
