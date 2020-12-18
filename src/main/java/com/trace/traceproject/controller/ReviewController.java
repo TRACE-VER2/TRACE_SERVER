@@ -3,7 +3,7 @@ package com.trace.traceproject.controller;
 import com.trace.traceproject.domain.Review;
 import com.trace.traceproject.dto.request.BuildingReviewDto;
 import com.trace.traceproject.dto.request.ReviewSaveDto;
-import com.trace.traceproject.dto.response.SingleResult;
+import com.trace.traceproject.dto.response.model.SingleResult;
 import com.trace.traceproject.service.ResponseService;
 import com.trace.traceproject.service.ReviewService;
 import lombok.RequiredArgsConstructor;

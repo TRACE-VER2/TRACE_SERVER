@@ -1,15 +1,13 @@
 spring:
   profiles:
     active: local
-    include: jwt
+    include: redis, jwt, mail
+
   datasource:
     url: jdbc:h2:tcp://localhost/~/trace_server
     username: sa
     password:
     driver-class-name: org.h2.Driver
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
 
   servlet:
     multipart:
@@ -24,6 +22,10 @@ spring:
         format_sql: true
         use_sql_comments: true
         default_batch_fetch_size: 100 # 지연로딩 컬렉션 조회 성능 최적화 설정
+
+  redis:
+    host: localhost
+    port: 6379
 
 logging:
   level:

@@ -1,7 +1,9 @@
 package com.trace.traceproject.advice;
 
 import com.trace.traceproject.advice.exception.CAuthenticationEntryPointException;
-import com.trace.traceproject.dto.response.CommonResult;
+import com.trace.traceproject.advice.exception.InvalidAuthenticationTokenException;
+import com.trace.traceproject.advice.exception.PasswordMismatchException;
+import com.trace.traceproject.dto.response.model.CommonResult;
 import com.trace.traceproject.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,14 +34,25 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(CAuthenticationEntryPointException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)//인증실패
     public CommonResult authenticationEntryPointException(HttpServletRequest request, Exception e) {
-        return responseService.getFailResult(-1002, "해당 리소스에 접근하기 위한 권한이 없습니다.");
+        return responseService.getFailResult(401, "해당 리소스에 접근하기 위한 권한이 없습니다.");
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.FORBIDDEN)//인가실패
     public CommonResult accessDeniedException(HttpServletRequest request, Exception e) {
-        return responseService.getFailResult(-1003, "보유한 권한으로 접근할 수 없는 리소스입니다.");
+        return responseService.getFailResult(403, "보유한 권한으로 접근할 수 없는 리소스입니다.");
+    }
+
+    @ExceptionHandler(PasswordMismatchException.class)
+    public CommonResult passwordMismatchException(HttpServletRequest request, Exception e) {
+        return responseService.getFailResult(401, "비밀번호가 일치하지 않습니다.");
+    }
+
+    @ExceptionHandler(InvalidAuthenticationTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public CommonResult expiredAuthenticationTokenException(HttpServletRequest request, Exception e) {
+        return responseService.getFailResult(401, "유효하지 않은 토큰입니다.");
     }
 }

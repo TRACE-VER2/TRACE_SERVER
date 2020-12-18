@@ -1,4 +1,4 @@
-package com.trace.traceproject.dto.response;
+package com.trace.traceproject.dto.response.model;
 
 import lombok.Getter;
 import lombok.Setter;

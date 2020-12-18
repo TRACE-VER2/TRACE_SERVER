@@ -1,7 +1,7 @@
 package com.trace.traceproject.controller;
 
 import com.trace.traceproject.advice.exception.CAuthenticationEntryPointException;
-import com.trace.traceproject.dto.response.CommonResult;
+import com.trace.traceproject.dto.response.model.CommonResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.GetMapping;

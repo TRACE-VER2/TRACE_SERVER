@@ -1,24 +1,32 @@
+/*
 package com.trace.traceproject.security.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
+
+*/
+/**
+ * 인증 방식 변경 (사용 안함)
+ *//*
+
+
+//AuthenticationProvider역할
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
@@ -46,11 +54,15 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(now.getTime() + tokenValidMilisecond)) // set Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey) //암호화 알고리즘, secret값 세팅
                 .compact();
+
     }
+
 
     //Jwt토큰으로 인증 정보를 조회
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
+        //보통 인증 후에 Password(Credential)같은 중요 정보는 비워둔체로 Authentication 리턴한다
+        //생성시 기본값으로 setAuthenticated가 true로 설정됨
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
@@ -73,4 +85,6 @@ public class JwtTokenProvider {
             return false;
         }
     }
-}
+
+
+}*/

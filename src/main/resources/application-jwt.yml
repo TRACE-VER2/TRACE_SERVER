@@ -1,2 +1,5 @@
 jwt:
   secret: jaggutrace
+  expiretime:
+    access: 10
+    refresh: 100

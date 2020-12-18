@@ -1,12 +1,14 @@
-package com.trace.traceproject.security.config;
+package com.trace.traceproject.config;
 
+import com.trace.traceproject.security.exception.CustomAccessDeniedHandler;
+import com.trace.traceproject.security.exception.CustomAuthenticationEntryPoint;
 import com.trace.traceproject.security.jwt.JwtAuthenticationFilter;
-import com.trace.traceproject.security.jwt.JwtTokenProvider;
+import com.trace.traceproject.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,13 +16,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtUtil jwtUtil;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     //암호화에 필요한 PasswordEncoder를 Bean 등록
     @Bean
@@ -28,11 +31,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+/*
     //authenticationManger를 Bean등록
+    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -42,15 +48,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //jwt 토큰기반 인증이므로 세션 필요없기에 생성안함
                 .and()
                     .authorizeRequests() //요청에 대한 사용권한 체크
-                        .antMatchers("/api/v1/members/login", "/api/v1/members/join").permitAll() //가입 및 인증 주소는 누구나 접근 가능
+                        .antMatchers("/api/v1/members/login", "/api/v1/members/join", "/api/v1/members/refreshToken").permitAll() //가입 및 인증 주소는 누구나 접근 가능
                         .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
                     .antMatchers("/api/v1/images/**").hasRole("ADMIN") //접근권한 테스트용 설정
                     .anyRequest().hasRole("USER") //나머지 요청은 모두 인증된 회원만 접근 가능
+                .and() //exceptionHandling() : 예외처리기능 작동
+                    .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()) //인가 실패시 처리
                 .and()
-                    .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
+                    .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint()) //인증실패시 처리
                 .and()
-                    .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                .and()
-                    .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                //UsernamePasswordAuthenticationFilter대신 직접 정의한 JwtAuthenticationFilter로 대체
+                //동작 방식은 UsernamePasswordAuthenticatinoFilter랑 비슷하게 정의함
+                    .addFilterAt(new JwtAuthenticationFilter(jwtUtil, redisTemplate), UsernamePasswordAuthenticationFilter.class);
     }
+
 }

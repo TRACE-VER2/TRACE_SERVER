@@ -1,8 +1,8 @@
 package com.trace.traceproject.service;
 
-import com.trace.traceproject.dto.response.CommonResult;
-import com.trace.traceproject.dto.response.ListResult;
-import com.trace.traceproject.dto.response.SingleResult;
+import com.trace.traceproject.dto.response.model.CommonResult;
+import com.trace.traceproject.dto.response.model.ListResult;
+import com.trace.traceproject.dto.response.model.SingleResult;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;

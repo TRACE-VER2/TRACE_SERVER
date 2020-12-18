@@ -1,4 +1,4 @@
-package com.trace.traceproject.security.config;
+package com.trace.traceproject.security.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//토큰 검증단에서 발생한 예외를 잡아서 controller로 리다이렉트해주는 역할
+//토큰 검증단에서 발생한 예외 처리하는 부분
+//토큰 검증단에서 발생한 예외를 잡아서 controller로 리다이렉트해주는 역할 (예외처리 위임)
 @Slf4j
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
