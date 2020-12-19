@@ -1,3 +1,5 @@
+#gitignore에 추가해야함
+
 jwt:
   secret: jaggutrace
   expiretime:

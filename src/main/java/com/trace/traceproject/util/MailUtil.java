@@ -1,16 +1,16 @@
-package com.trace.traceproject.service;
+package com.trace.traceproject.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
 @RequiredArgsConstructor
-@Service
-public class MailService {
+@Component
+public class MailUtil {
     private final JavaMailSender javaMailSender;
 
     /**
@@ -57,7 +57,7 @@ public class MailService {
     private String getRandomKey(int size) {
         Random random = new Random();
         StringBuffer buffer = new StringBuffer();
-        int num = 0;
+        int num;
 
         while (buffer.length() < size) {
             num = random.nextInt(10);
@@ -74,7 +74,7 @@ public class MailService {
 
         StringBuffer buffer = new StringBuffer();
 
-        int idx = 0;
+        int idx;
         for (int i = 0; i < 10; i++) {
             idx = (int) (charSet.length * Math.random());
             buffer.append(charSet[idx]);

@@ -1,10 +1,13 @@
 package com.trace.traceproject.controller;
 
 import com.trace.traceproject.advice.exception.InvalidAuthenticationTokenException;
+import com.trace.traceproject.advice.exception.PasswordMismatchException;
 import com.trace.traceproject.domain.Member;
 import com.trace.traceproject.dto.Token;
+import com.trace.traceproject.dto.request.ChangePasswordDto;
 import com.trace.traceproject.dto.request.MemberJoinDto;
 import com.trace.traceproject.dto.response.LoginResponseDto;
+import com.trace.traceproject.dto.response.model.CommonResult;
 import com.trace.traceproject.dto.response.model.SingleResult;
 import com.trace.traceproject.repository.TokenRedisRepository;
 import com.trace.traceproject.security.jwt.JwtUtil;
@@ -14,11 +17,14 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,10 +50,10 @@ public class MemberController {
     @PostMapping("/api/v1/members/login")
     public SingleResult login(@RequestBody Map<String, String> loginRequest) {
         Member member = memberService.findByUserId(loginRequest.get("userId"));
-        
+
         //비밀번호 불일치
         if (!passwordEncoder.matches(loginRequest.get("password"), member.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new PasswordMismatchException("잘못된 비밀번호입니다.");
         }
 
         //로그인 성공
@@ -65,16 +71,43 @@ public class MemberController {
         return responseService.getSingleResult(new LoginResponseDto(access, refresh));
     }
 
+    /**
+     * 비밀번호 변경 요청 (로그인 된 상태에서만 가능 == 인증 토큰 같이 보내야함)
+     * controller에서는 Principal을 인자로 받아서 현재 로그인된 사용자 정보에 접근 가능
+     * Authentication도 인자로 받을 수 있음
+     * @AuthenticationPrincipal 어노테이션으로 어디에서든 인증된 사용자 정보 받을 수 있음
+     */
+    @PostMapping("/api/v1/members/password")
+    public CommonResult changePassword(Principal principal, @RequestBody ChangePasswordDto changePasswordDto) {
+
+        String prevPw = changePasswordDto.getPrevPassword();
+        String changedPw = changePasswordDto.getChangedPassword();
+
+//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//        String userId = userDetails.getUsername();
+
+        String userId = principal.getName();
+        Member member = memberService.findByUserId(userId);
+
+        if (!passwordEncoder.matches(prevPw, member.getPassword())) {
+            throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
+        }
+
+        log.info("member Id : " + member.getId());
+        memberService.changePassword(member.getId(), passwordEncoder.encode(changedPw));
+
+        return responseService.getSuccessResult();
+    }
+
     //access token 재발급 요청
     @PostMapping("/api/v1/members/refreshToken")
     public SingleResult refresh(@RequestBody Map<String, String> refreshRequest) {
         String refreshToken = refreshRequest.get("refreshToken");
-        String username = null;
+        String username;
         Map<String, String> result = new HashMap<>();
 
         try {
             username = jwtUtil.getUsernameFromToken(refreshToken);
-        } catch (IllegalArgumentException e) {
         } catch (ExpiredJwtException e) {
             throw new InvalidAuthenticationTokenException("refreshToken이 만료되었습니다.");
         }

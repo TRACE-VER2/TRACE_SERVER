@@ -1,5 +1,6 @@
 package com.trace.traceproject.service;
 
+import com.trace.traceproject.advice.exception.NoSuchEntityException;
 import com.trace.traceproject.domain.Building;
 import com.trace.traceproject.domain.Image;
 import com.trace.traceproject.domain.Member;
@@ -36,9 +37,9 @@ public class ReviewService {
         if(files == null || files.isEmpty()) files = new ArrayList<>();
 
         Member member = memberRepository.findByUserId(reviewSaveDto.getUserId())
-                .orElseThrow(()-> new IllegalStateException("유효하지 않은 회원id 입니다."));
+                .orElseThrow(()-> new NoSuchEntityException("유효하지 않은 회원id 입니다."));
         Building building = buildingRepository.findById(reviewSaveDto.getBuildingId())
-                .orElseThrow(() -> new IllegalStateException("유효하지 않은 빌딩입니다."));
+                .orElseThrow(() -> new NoSuchEntityException("유효하지 않은 빌딩입니다."));
 
         List<Image> images = uploadImages(files, reviewSaveDto);
 
@@ -85,13 +86,13 @@ public class ReviewService {
     }
 
     public Review findById(Long id) {
-        return reviewRepository.findById(id).orElseThrow(() -> new IllegalStateException("해당 게시물이 존재하지 않습니다."));
+        return reviewRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("해당 게시물이 존재하지 않습니다."));
     }
 
     @Transactional
     public void update(ReviewUpdateDto reviewUpdateDto) {
         Review review = reviewRepository.findById(reviewUpdateDto.getReviewId())
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 리뷰입니다."));
+                .orElseThrow(() -> new NoSuchEntityException("존재하지 않는 리뷰입니다."));
 
         //변경감지
         review.changeReview(reviewUpdateDto);

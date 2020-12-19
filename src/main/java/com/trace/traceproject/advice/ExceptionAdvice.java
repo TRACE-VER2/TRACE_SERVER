@@ -2,6 +2,7 @@ package com.trace.traceproject.advice;
 
 import com.trace.traceproject.advice.exception.CAuthenticationEntryPointException;
 import com.trace.traceproject.advice.exception.InvalidAuthenticationTokenException;
+import com.trace.traceproject.advice.exception.NoSuchEntityException;
 import com.trace.traceproject.advice.exception.PasswordMismatchException;
 import com.trace.traceproject.dto.response.model.CommonResult;
 import com.trace.traceproject.service.ResponseService;
@@ -30,7 +31,8 @@ public class ExceptionAdvice {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected CommonResult defaultException(HttpServletRequest request, Exception e) {
-        return responseService.getFailResult();
+        e.getStackTrace();
+        return responseService.getFailResult(500, e.getMessage());
     }
 
     @ExceptionHandler(CAuthenticationEntryPointException.class)
@@ -46,6 +48,7 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(PasswordMismatchException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public CommonResult passwordMismatchException(HttpServletRequest request, Exception e) {
         return responseService.getFailResult(401, "비밀번호가 일치하지 않습니다.");
     }
@@ -54,5 +57,11 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public CommonResult expiredAuthenticationTokenException(HttpServletRequest request, Exception e) {
         return responseService.getFailResult(401, "유효하지 않은 토큰입니다.");
+    }
+
+    @ExceptionHandler(NoSuchEntityException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public CommonResult noSuchEntityException(HttpServletRequest request, Exception e) {
+        return responseService.getFailResult(404, e.getMessage());
     }
 }

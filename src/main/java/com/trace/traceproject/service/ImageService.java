@@ -1,5 +1,6 @@
 package com.trace.traceproject.service;
 
+import com.trace.traceproject.advice.exception.NoSuchEntityException;
 import com.trace.traceproject.domain.Image;
 import com.trace.traceproject.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +16,11 @@ public class ImageService {
 
     public Image findById(Long id) {
         return imageRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("잘못된 이미지 id입니다"));
+                .orElseThrow(() -> new NoSuchEntityException("잘못된 이미지 id입니다"));
     }
 
     public Image findByImagePath(String imagePath) {
         return imageRepository.findByFilePath(imagePath)
-                .orElseThrow(() -> new IllegalStateException("잘못된 이미지 주소입니다"));
+                .orElseThrow(() -> new NoSuchEntityException("잘못된 이미지 주소입니다"));
     }
 }

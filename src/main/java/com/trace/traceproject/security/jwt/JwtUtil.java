@@ -4,6 +4,7 @@ import com.trace.traceproject.security.service.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
  * 기존 UsernamePasswordAuthentication 로직에 맞추어 인증하지 않고 db의존성 제거
  * Jwt 자체정보를 통해 인증하도록 변경
  */
+@Slf4j
 @Component
 public class JwtUtil {
 
@@ -38,7 +40,7 @@ public class JwtUtil {
     public Authentication getAuthentication(String token) {
         //Jwt에서 정보 추출
         Map<String, Object> parseInfo = getUserParseInfo(token);
-        System.out.println("parseinfo: " + parseInfo);
+        log.info("parseinfo: " + parseInfo);
         List<String> roles =(List)parseInfo.get("role");
 
         //User은 Userdetails 구현체
@@ -47,13 +49,11 @@ public class JwtUtil {
                 .authorities(roles.stream()
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toSet()))
-                .password("asd")
+                .password("")
                 .build();
 
         //Jwt자체 정보 바탕으로 db 참조 없이 AuthenticationToken 생성
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        return usernamePasswordAuthenticationToken;
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
 
@@ -123,8 +123,7 @@ public class JwtUtil {
     //validate token
     public Boolean validateToken(String token) {
         try{
-            boolean result = !isTokenExpired(token);
-            return result;
+            return !isTokenExpired(token);
         } catch (Exception e){
             return false;
         }

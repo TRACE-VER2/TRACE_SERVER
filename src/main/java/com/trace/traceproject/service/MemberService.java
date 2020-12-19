@@ -1,5 +1,6 @@
 package com.trace.traceproject.service;
 
+import com.trace.traceproject.advice.exception.NoSuchEntityException;
 import com.trace.traceproject.domain.Member;
 import com.trace.traceproject.domain.enums.Role;
 import com.trace.traceproject.dto.request.MemberUpdateDto;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,20 +47,29 @@ public class MemberService implements UserDbService {
     }
 
     Member findById(Long id) {
-        return memberRepository.findById(id).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+        return memberRepository.findById(id).orElseThrow(() -> new NoSuchEntityException("존재하지 않는 회원입니다."));
     }
 
+    public Member findByNameAndPhoneNum(String name, String phoneNum) {
+        return memberRepository.findByNameAndPhoneNum(name, phoneNum)
+                .orElseThrow(() -> new NoSuchEntityException("존재하지 않는 회원 정보입니다."));
+    }
 
     public Member findByUserId(String userId) {
         return memberRepository.findByUserId(userId)
-                .orElseThrow(()->new IllegalStateException("유효하지 않은 회원 id입니다."));
+                .orElseThrow(()->new NoSuchEntityException("유효하지 않은 회원 id입니다."));
+    }
+
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchEntityException("유효하지 않은 이메일 주소입니다."));
     }
 
     //회원 정보 수정
     @Transactional
     public void update(MemberUpdateDto memberUpdateDto) {
         Member member = memberRepository.findByUserId(memberUpdateDto.getUserId())
-                .orElseThrow(()->new IllegalStateException("유효하지 않은 회원 id입니다."));
+                .orElseThrow(()->new NoSuchEntityException("유효하지 않은 회원 id입니다."));
         member.changeUserInfo(memberUpdateDto.getPhoneNum(),
                 memberUpdateDto.getPreferences().stream()
                             .map(Tag::valueOf)
@@ -66,11 +77,20 @@ public class MemberService implements UserDbService {
                             .collect(Collectors.toSet()));
     }
 
+    //비밀번호 수정
+    @Transactional
+    public void changePassword(Long id, String password) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new NoSuchEntityException("유효하지 않은 회원 id입니다."));
+
+        member.changePassword(password);
+    }
+
     //security context에 저장할 userInfo 불러오는 메서드
     @Override
     public UserInfo getUserInfo(String userId) {
         Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(()-> null);
+                .orElseThrow(() -> new NoSuchEntityException("유효하지 않은 회원id입니다."));
 
         Set<String> roles = member.getRoles().stream().map(Enum::name).collect(Collectors.toSet());
 

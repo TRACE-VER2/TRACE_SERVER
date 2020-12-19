@@ -47,6 +47,15 @@ public class ResponseService {
         return result;
     }
 
+    //성공 결과만 처리하는 메서드
+    public CommonResult getSuccessResult(int code, String message) {
+        CommonResult result = new CommonResult();
+        result.setSuccess(true);
+        result.setCode(code);
+        result.setMsg(message);
+        return result;
+    }
+
     //실패 결과만 처리하는 메서드
     public CommonResult getFailResult() {
         CommonResult result = new CommonResult();

@@ -1,3 +1,5 @@
+#gitignore에 추가해야함
+
 spring:
   mail:
     host: smtp.gmail.com # gmail SMTP 사용하기 위해 설정

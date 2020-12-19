@@ -61,5 +61,12 @@ public class Member extends BaseTimeEntity{
         this.preferences = preferences;
     }
 
+    /**
+     * 비밀 번호 변경
+     */
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
 }
 
