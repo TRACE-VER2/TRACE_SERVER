@@ -49,7 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests() //요청에 대한 사용권한 체크
                         .antMatchers("/api/v1/members/login", "/api/v1/members/join", "/api/v1/members/refreshToken").permitAll() //가입 및 인증 주소는 누구나 접근 가능
-                        .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
+                        .antMatchers("/api/v1/mail/verification/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/exception/**").permitAll()
                     .antMatchers("/api/v1/images/**").hasRole("ADMIN") //접근권한 테스트용 설정
                     .anyRequest().hasRole("USER") //나머지 요청은 모두 인증된 회원만 접근 가능
                 .and() //exceptionHandling() : 예외처리기능 작동

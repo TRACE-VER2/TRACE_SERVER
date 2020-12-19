@@ -1,0 +1,10 @@
+spring:
+  mail:
+    host: smtp.gmail.com # gmail SMTP 사용하기 위해 설정
+    port: 587 # 메일 전송 포트 설정
+    username: jaggutrace@gmail.com # 송신 gmail 계정
+    password: zzvfggvbsayvtril # 앱 비밀번호
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+
