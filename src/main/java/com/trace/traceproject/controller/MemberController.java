@@ -41,10 +41,11 @@ public class MemberController {
     private final ResponseService responseService;
 
     @PostMapping("/api/v1/members/join")
-    public Long join(@RequestBody MemberJoinDto memberJoinDto){
+    public CommonResult join(@RequestBody MemberJoinDto memberJoinDto){
         //비밀번호 암호화
         memberJoinDto.setPassword(passwordEncoder.encode(memberJoinDto.getPassword()));
-        return memberService.join(memberJoinDto);
+        memberService.join(memberJoinDto);
+        return responseService.getSuccessResult(200, "회원가입 성공");
     }
 
     @PostMapping("/api/v1/members/login")
@@ -96,7 +97,7 @@ public class MemberController {
         log.info("member Id : " + member.getId());
         memberService.changePassword(member.getId(), passwordEncoder.encode(changedPw));
 
-        return responseService.getSuccessResult();
+        return responseService.getSuccessResult(200, "비밀번호 변경 성공");
     }
 
     //access token 재발급 요청

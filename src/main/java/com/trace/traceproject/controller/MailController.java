@@ -9,7 +9,6 @@ import com.trace.traceproject.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,8 +25,8 @@ public class MailController {
     private final ResponseService responseService;
 
     //인증 이메일 전송
-    @GetMapping("/api/v1/mail/verification/{mail}")
-    public SingleResult mailVerification(@PathVariable("mail") String mail) {
+    @GetMapping("/api/v1/mail/verification")
+    public SingleResult mailVerification(@RequestParam("mail") String mail) {
         Map<String, String> result = new HashMap<>();
 
         String verificationKey = mailUtil.sendValidationEmail(mail);

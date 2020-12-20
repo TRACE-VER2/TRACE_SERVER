@@ -45,8 +45,8 @@ public class MailUtil {
         String tmpPassword = getRandomPassword();
         String title = name + "님의 트레이스 임시 비밀번호 안내 이메일입니다.";
         String message = "안녕하세요. 임시 비밀번호 안내 관련 이메일입니다. \n" +
-                "임시 비밀번호는 " + tmpPassword + " 입니다.\n" +
-                "로그인 후 비밀번호를 꼭 변경하여주시기 바랍니다.";
+                "로그인 후 비밀번호를 꼭 변경하여주시기 바랍니다. \n\n"+
+                "임시 비밀번호 : " + tmpPassword;
 
         sendEmail(mailAddress, title, message);
 
