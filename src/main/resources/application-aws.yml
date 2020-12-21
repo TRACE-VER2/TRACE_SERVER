@@ -1,0 +1,15 @@
+cloud:
+  aws:
+    s3:
+      bucket: tracefreebucket # 본인 S3 bucket 이름
+    region:
+      static: ap-northeast-2
+    stack:
+      # EC2에서 Spring Cloud 프로젝트를 실행시키면 기본으로 CloutFormation 구성 시작함
+      # 설정한 CloutFormation이 없으면 프로젝트 시작이 안되니, 해당 내용을 사용하지 않도록 false 설정
+      auto: false
+    credentials:
+      # AWS의 instanceProfile을 사용
+      # AWS CLI에서 aws configure list 로 확인한 Key들을 사용
+      # 만약 이 값들이 없다면 application.yml이나 Environment등에서 해당 키가 있는지 찾아서 확인
+      instanceProfile: true

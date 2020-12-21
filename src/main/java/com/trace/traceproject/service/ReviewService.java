@@ -12,6 +12,7 @@ import com.trace.traceproject.repository.ImageRepository;
 import com.trace.traceproject.repository.MemberRepository;
 import com.trace.traceproject.repository.ReviewRepository;
 import com.trace.traceproject.util.MD5Generator;
+import com.trace.traceproject.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -31,6 +32,7 @@ public class ReviewService {
     private final BuildingRepository buildingRepository;
     private final MemberRepository memberRepository;
     private final ImageRepository imageRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     public Long save(List<MultipartFile> files, ReviewSaveDto reviewSaveDto) {
@@ -41,7 +43,7 @@ public class ReviewService {
         Building building = buildingRepository.findById(reviewSaveDto.getBuildingId())
                 .orElseThrow(() -> new NoSuchEntityException("유효하지 않은 빌딩입니다."));
 
-        List<Image> images = uploadImages(files, reviewSaveDto);
+        List<Image> images = uploadImages(files);
 
         //개인이 한 건물당 남길 수 있는 리뷰 하나로 제한?
 
@@ -50,12 +52,17 @@ public class ReviewService {
         return reviewRepository.save(review).getId();
     }
 
-    private List<Image> uploadImages(List<MultipartFile> files, ReviewSaveDto reviewSaveDto) {
+    private List<Image> uploadImages(List<MultipartFile> files) {
         List<Image> images = new ArrayList<>();
         for (MultipartFile file : files) {
             try {
                 String origFilename = file.getOriginalFilename();
                 String filename = new MD5Generator(origFilename).toString();
+                //s3버킷의 images 폴더에 이미지 저장
+                String filePath = s3Uploader.upload(file, "images");
+
+/*
+                //로컬 저장소에 저장하는 방식
                 //실행되는 위치의 files 폴더에 파일이 저장
                 String savePath = System.getProperty("user.dir") + "\\files"; //escape코드라서 역슬래시 두번해줌
                 //파일이 저장되는 폴더가 없으면 폴더 생성
@@ -68,6 +75,7 @@ public class ReviewService {
                 }
                 String filePath = savePath + "\\" + filename;
                 file.transferTo(new File(filePath));
+*/
 
                 Image image = Image.builder()
                         .origFilename(origFilename)
@@ -76,7 +84,6 @@ public class ReviewService {
                         .build();
 
                 imageRepository.save(image);
-
                 images.add(image);
             } catch (Exception e) {
                 e.getStackTrace();

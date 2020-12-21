@@ -25,6 +25,17 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    //s3 이미지 url보내주는 방법
+    @GetMapping(value = "api/v1/images/{imageId}",
+            produces = {IMAGE_JPEG_VALUE})
+    public String findById(@PathVariable("imageId") Long imageId) throws IOException {
+        Image image = imageService.findById(imageId);
+
+        return image.getFilePath();
+    }
+
+/*
+    //로컬에서 이미지 리턴하는 방법
     @GetMapping(value = "api/v1/images/{imageId}",
             produces = {IMAGE_JPEG_VALUE})
     public ResponseEntity<Resource> findById(@PathVariable("imageId") Long imageId) throws IOException {
@@ -38,17 +49,6 @@ public class ImageController {
 //                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getOrigFilename() + "\"")
                 .body(resource);
     }
+*/
 
-/*    @GetMapping(value = "api/v1/images",
-            produces = {IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE})
-    public ResponseEntity<Resource> findByImagePath(@RequestParam("imagePath") String imagePath) throws IOException {
-        Image image = imageService.findByImagePath(imagePath);
-        Path path = Paths.get(image.getFilePath());
-        Resource resource = new InputStreamResource(Files.newInputStream(path));
-
-        return ResponseEntity.ok()
-                .contentType(parseMediaType("image/jpeg"))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getOrigFilename() + "\"")
-                .body(resource);
-    }*/
 }

@@ -33,3 +33,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### yml ###
+application-awscredential.yml
+application-mail.yml
+application-jwt.yml

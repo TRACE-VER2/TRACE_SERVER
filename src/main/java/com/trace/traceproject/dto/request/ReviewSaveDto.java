@@ -43,7 +43,7 @@ public class ReviewSaveDto {
     private String contact;
     private LocalDateTime durationStart;
     private LocalDateTime durationEnd;
-
+/*
     public Review toEntity(Member member, Building building) {
         return Review.builder()
                 .member(member)
@@ -69,6 +69,7 @@ public class ReviewSaveDto {
                 .durationEnd(durationEnd)
                 .build();
     }
+*/
 
     public ReviewInfo getReviewInfo() {
         return ReviewInfo.builder()

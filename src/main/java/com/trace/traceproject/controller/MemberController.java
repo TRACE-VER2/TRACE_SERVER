@@ -101,7 +101,7 @@ public class MemberController {
     }
 
     //access token 재발급 요청
-    @PostMapping("/api/v1/members/refreshToken")
+    @PostMapping("/api/v1/members/refresh-token")
     public SingleResult refresh(@RequestBody Map<String, String> refreshRequest) {
         String refreshToken = refreshRequest.get("refreshToken");
         String username;

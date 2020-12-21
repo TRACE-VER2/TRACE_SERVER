@@ -1,7 +1,7 @@
 spring:
   profiles:
     active: local
-    include: redis, jwt, mail
+    include: redis, jwt, mail, aws, awscredential
 
   datasource:
     url: jdbc:h2:tcp://localhost/~/trace_server
