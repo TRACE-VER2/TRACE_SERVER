@@ -1,7 +1,6 @@
 spring:
   profiles:
-    active: local
-    include: redis, jwt, mail, aws, awscredential
+    include: jwt, mail, aws, aws-credential
 
   datasource:
     url: jdbc:h2:tcp://localhost/~/trace_server
@@ -9,6 +8,7 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+  # multipart file 설정
   servlet:
     multipart:
       enabled: true

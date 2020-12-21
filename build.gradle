@@ -18,7 +18,9 @@ repositories {
     mavenCentral()
 }
 
-dependencies {implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.1.RELEASE'//aws s3 연동
+dependencies {
+    implementation 'org.mariadb.jdbc:mariadb-java-client' //운영환경에서 사용할 maria db client
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.1.RELEASE'//aws s3 연동
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-mail'//이메일 인증
     implementation 'io.jsonwebtoken:jjwt:0.9.1' //jwt 토큰 모듈

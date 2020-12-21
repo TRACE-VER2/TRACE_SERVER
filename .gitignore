@@ -35,6 +35,7 @@ out/
 .vscode/
 
 ### yml ###
-application-awscredential.yml
+application-aws-credential.yml
 application-mail.yml
 application-jwt.yml
+application-real-db.yml

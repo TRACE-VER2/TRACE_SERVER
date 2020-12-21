@@ -1,3 +1,4 @@
+/*
 package com.trace.traceproject;
 
 import com.trace.traceproject.domain.Building;
@@ -28,3 +29,4 @@ public class InitDb implements CommandLineRunner {
         buildingRepository.save(building);
     }
 }
+*/
