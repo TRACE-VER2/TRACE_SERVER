@@ -20,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin
 public class ReviewController {
     private final ReviewService reviewService;
     private final ResponseService responseService;

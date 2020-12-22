@@ -4,6 +4,7 @@ import com.trace.traceproject.advice.exception.CAuthenticationEntryPointExceptio
 import com.trace.traceproject.dto.response.model.CommonResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/exception")
+@CrossOrigin
 public class ExceptionController {
 
     @GetMapping("/entrypoint")
