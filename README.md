@@ -1,8 +1,6 @@
 # 🏡트레이스 - 지역기반 자취방 후기 커뮤니티 플랫폼
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3aab6d14-d028-47c3-aa60-3cefbe81e002/5.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3aab6d14-d028-47c3-aa60-3cefbe81e002/5.png)
-
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1923f145-f93a-479d-8c8d-a75d2728c5bc/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1923f145-f93a-479d-8c8d-a75d2728c5bc/Untitled.png)
+![logo1](https://user-images.githubusercontent.com/40594564/102929876-c0065100-44de-11eb-9fc4-f5489f485df2.png)
 
 ## 🤔서비스 소개
 
@@ -27,17 +25,17 @@
 
 ## ✨기술 스택
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/efb0e424-018f-4966-a5aa-5f08cdb36241/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/efb0e424-018f-4966-a5aa-5f08cdb36241/Untitled.png)
+![트레이스 기술스택](https://user-images.githubusercontent.com/40594564/102929972-efb55900-44de-11eb-8b9d-785660d707f2.png)
 
 ## 🏗️ 서버 아키택처
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/eeed4a91-f205-4cd2-b0ad-82aeb9a6c0a8/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/eeed4a91-f205-4cd2-b0ad-82aeb9a6c0a8/Untitled.png)
+![서버 아키텍처](https://user-images.githubusercontent.com/40594564/102929444-f2637e80-44dd-11eb-8684-fa02d8dc7237.png)
 
 ## 📊 ERD & 엔티티 클래스 다이어그램
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9f2e875c-eeee-4f8d-813d-ae47a6cd8ed1/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9f2e875c-eeee-4f8d-813d-ae47a6cd8ed1/Untitled.png)
+![트레이스 ERD](https://user-images.githubusercontent.com/40594564/102930012-0196fc00-44df-11eb-87a4-72b0d1bfd486.jpg)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/761b0800-c16c-4656-a5ec-640486331a80/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/761b0800-c16c-4656-a5ec-640486331a80/Untitled.png)
+![트레이스 엔티티 다이어그램](https://user-images.githubusercontent.com/40594564/102930019-05c31980-44df-11eb-90cd-6b3e1f4e55ff.jpg)
 
 ## 🖨️API 명세서
 
@@ -47,4 +45,4 @@
 
 ### API 명세서
 
-[git book api 링크](https://syleemk.gitbook.io/trace/)
+- [git book api 링크](https://syleemk.gitbook.io/trace/)
