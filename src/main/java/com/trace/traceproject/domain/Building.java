@@ -22,13 +22,16 @@ public class Building extends BaseTimeEntity{
     private Location location;
 
     private String address;
+    
+    private Integer oneRoomPrice;
 
     private LocalDateTime completionDate;
 
     @Builder
-    public Building(Location location, String address, LocalDateTime completionDate) {
+    public Building(Location location, String address, Integer oneRoomPrice, LocalDateTime completionDate) {
         this.location = location;
         this.address = address;
+        this.oneRoomPrice = oneRoomPrice;
         this.completionDate = completionDate;
     }
 }
