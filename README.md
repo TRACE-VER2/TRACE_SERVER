@@ -20,9 +20,19 @@
 
 ### 🤼 역할 분담
 
-- 이수영 : api 서버 구축 / id, password 기반 회원가입, 인증, 인가 처리 / ERD & Entity Class Diagram 작성 / API 설계 / AWS S3 버킷 연결
-- 배준호 : AWS EC2 배포 환경 구축 / DNS 연결 / DB에 빌딩 데이터 INSERT
-- 배지홍 : 공공 API를 통해 얻은 건물 정보 가공 및 데이터 분석
+- 이수영 :
+    - api 서버 구축 
+    - 회원가입, 로그인 기능 구현
+    - JWT 기반 인증 인가 구현
+    - ERD & Entity Class Diagram 작성 
+    - API 설계 
+    - AWS S3 버킷 연결
+- 배준호 : 
+    - AWS EC2 배포 환경 구축 
+    - EC2 DNS 연결 
+    - DB에 빌딩 데이터 INSERT
+- 배지홍 : 
+    - 공공 API를 통해 얻은 건물 정보 가공 및 데이터 분석
 
 ## ✨기술 스택
 
