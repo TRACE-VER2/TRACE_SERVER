@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Building extends BaseTimeEntity{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "building_id")
     private Long id;
 
@@ -21,16 +21,19 @@ public class Building extends BaseTimeEntity{
     @JoinColumn(name = "location_id")
     private Location location;
 
-    private String address;
+    private String address;//지번주소 (동까지)
+
+    private String lotNumber;//지번
     
     private Integer oneRoomPrice;
 
     private LocalDateTime completionDate;
 
     @Builder
-    public Building(Location location, String address, Integer oneRoomPrice, LocalDateTime completionDate) {
+    public Building(Location location, String address, String lotNumber, Integer oneRoomPrice, LocalDateTime completionDate) {
         this.location = location;
         this.address = address;
+        this.lotNumber = lotNumber;
         this.oneRoomPrice = oneRoomPrice;
         this.completionDate = completionDate;
     }

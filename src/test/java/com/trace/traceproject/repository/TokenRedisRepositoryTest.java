@@ -29,10 +29,10 @@ class TokenRedisRepositoryTest {
         Token saveToken = tokenRedisRepository.save(token);
     }
 
-//    @AfterEach
-//    public void afterEach() {
-//        tokenRedisRepository.deleteAll();
-//    }
+    @AfterEach
+    public void afterEach() {
+        tokenRedisRepository.deleteAll();
+    }
 
     @Test
     public void save() throws Exception {

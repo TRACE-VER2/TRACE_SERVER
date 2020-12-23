@@ -21,7 +21,7 @@ import java.util.List;
 @ToString(of = {"id","rentType"})
 public class Review extends BaseTimeEntity{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
     private Long id;
 
@@ -36,6 +36,7 @@ public class Review extends BaseTimeEntity{
     private String roomNumber; //호수
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<Image> images = new ArrayList<>(); //방 사진
 
     @Enumerated(EnumType.STRING)
