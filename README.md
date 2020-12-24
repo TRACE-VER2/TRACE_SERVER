@@ -27,6 +27,7 @@
     - ERD & Entity Class Diagram 작성 
     - API 설계 
     - AWS S3 버킷 연결
+    - 배포 스크립트 작성
 - 배준호 : 
     - AWS EC2 배포 환경 구축 
     - EC2 DNS 연결 
@@ -98,7 +99,7 @@ Ex)
 
 ## 🏗️ 서버 아키택처
 
-![서버 아키텍처](https://user-images.githubusercontent.com/40594564/102929444-f2637e80-44dd-11eb-8684-fa02d8dc7237.png)
+![서버 아키텍처](https://user-images.githubusercontent.com/40594564/102990179-4dd35200-455a-11eb-8f82-d07ea7c5f359.png)
 
 ## 📊 ERD & 엔티티 클래스 다이어그램
 
@@ -110,7 +111,7 @@ Ex)
 
 ### 스프레드 시트
 
-- 이미지 첨부 예정
+![트레이스 api 명세](https://user-images.githubusercontent.com/40594564/103093056-8cd9d400-463c-11eb-808a-ac1dab5aad1e.jpg)
 
 ### API 명세서
 
