@@ -111,7 +111,7 @@ Ex)
 
 ### 스프레드 시트
 
-![트레이스 api 명세](https://user-images.githubusercontent.com/40594564/103093056-8cd9d400-463c-11eb-808a-ac1dab5aad1e.jpg)
+![api 명세서](https://user-images.githubusercontent.com/40594564/103158189-9b6fe900-47fe-11eb-83e1-dceb732858a8.png)
 
 ### API 명세서
 

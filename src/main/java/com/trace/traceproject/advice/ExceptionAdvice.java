@@ -31,7 +31,7 @@ public class ExceptionAdvice {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected CommonResult defaultException(HttpServletRequest request, Exception e) {
-        e.getStackTrace();
+        e.printStackTrace();
         return responseService.getFailResult(500, e.getMessage());
     }
 
@@ -41,10 +41,14 @@ public class ExceptionAdvice {
         return responseService.getFailResult(401, "해당 리소스에 접근하기 위한 권한이 없습니다.");
     }
 
+    /**
+     * PreAuthorize 어노테이션으로 권한 인증 설정시 AccessDeniedException만 발생
+     * 클라이언트 단에서 인증 에러와, 인가 에러를 구분하는게 크게 의미없으므로 그냥 똑같이 처리
+     */
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)//인가실패
     public CommonResult accessDeniedException(HttpServletRequest request, Exception e) {
-        return responseService.getFailResult(403, "보유한 권한으로 접근할 수 없는 리소스입니다.");
+        return responseService.getFailResult(403, "해당 리소스에 접근하기 위한 권한이 없습니다.");
     }
 
     @ExceptionHandler(PasswordMismatchException.class)

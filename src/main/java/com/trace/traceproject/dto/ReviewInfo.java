@@ -9,6 +9,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 @Data
 @Builder
@@ -19,18 +20,18 @@ public class ReviewInfo {
     private int monthlyRent;
     private int score;
     private int area;
-    private LocalDateTime livingStart;
-    private LocalDateTime livingEnd;
+    private LocalDate livingStart;
+    private LocalDate livingEnd;
     private boolean remodeled;
     private GoodBadStatus waterPressure;
     private GoodBadStatus lighting;
     private GoodBadStatus frozen;
     private BugStatus bug;
     private NoiseStatus noise;
-    private String option;
+    private String options;
     private String nearBy;
     private String trueStory;
     private String contact;
-    private LocalDateTime durationStart;
-    private LocalDateTime durationEnd;
+    private LocalDate durationStart;
+    private LocalDate durationEnd;
 }

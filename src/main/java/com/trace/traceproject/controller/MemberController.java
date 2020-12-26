@@ -1,6 +1,5 @@
 package com.trace.traceproject.controller;
 
-import com.trace.traceproject.advice.exception.InvalidAuthenticationTokenException;
 import com.trace.traceproject.advice.exception.PasswordMismatchException;
 import com.trace.traceproject.domain.Member;
 import com.trace.traceproject.dto.Token;
@@ -16,18 +15,14 @@ import com.trace.traceproject.service.ResponseService;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -35,14 +30,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @CrossOrigin
+@RequestMapping("/api/v1/members")
 public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final MemberService memberService;
     private final JwtUtil jwtUtil;
     private final TokenRedisRepository tokenRedisRepository;
     private final ResponseService responseService;
+    private final RedisTemplate redisTemplate;
 
-    @PostMapping("/api/v1/members/join")
+    @PostMapping("/join")
     public CommonResult join(@RequestBody MemberJoinDto memberJoinDto){
         //비밀번호 암호화
         memberJoinDto.setPassword(passwordEncoder.encode(memberJoinDto.getPassword()));
@@ -50,7 +47,7 @@ public class MemberController {
         return responseService.getSuccessResult(200, "회원가입 성공");
     }
 
-    @PostMapping("/api/v1/members/login")
+    @PostMapping("/login")
     public SingleResult login(@RequestBody Map<String, String> loginRequest) {
         Member member = memberService.findByUserId(loginRequest.get("userId"));
 
@@ -74,13 +71,46 @@ public class MemberController {
         return responseService.getSingleResult(new LoginResponseDto(access, refresh));
     }
 
+    @GetMapping("/logout")
+//    @PreAuthorize("hasRole('ROLE_USER')")
+    public CommonResult logout(@RequestHeader("Authorization") String token) {//헤더에서 accessToken 가져옴
+        //Bearer 제거
+        String accessToken = token.substring(7);
+        String username;
+
+        try {
+            username = jwtUtil.getUsernameFromToken(accessToken);
+        } catch (ExpiredJwtException e) {
+            username = e.getClaims().getSubject();
+            log.info("username from expired access token : " + username);
+        }
+
+        //redis에서 refresh 토큰 삭제
+        if (tokenRedisRepository.existsById(username)) {
+            log.info("delete refresh Token from redis");
+            tokenRedisRepository.deleteById(username);
+        } else {
+            log.warn("로그인 되어있지 않음");
+        }
+
+        //logout 토큰 캐싱 (만료시간만큼)
+        log.info("logout ing : " + accessToken);
+//        redisTemplate.opsForValue().set(accessToken, true);
+//        redisTemplate.expire(accessToken, 2, TimeUnit.HOURS);
+
+        Token logoutToken = new Token(accessToken, null, 2);
+        tokenRedisRepository.save(logoutToken);
+
+        return responseService.getSuccessResult(200, "로그아웃 성공");
+    }
+
     /**
      * 비밀번호 변경 요청 (로그인 된 상태에서만 가능 == 인증 토큰 같이 보내야함)
      * controller에서는 Principal을 인자로 받아서 현재 로그인된 사용자 정보에 접근 가능
      * Authentication도 인자로 받을 수 있음
      * @AuthenticationPrincipal 어노테이션으로 어디에서든 인증된 사용자 정보 받을 수 있음
      */
-    @PostMapping("/api/v1/members/password")
+    @PostMapping("/password")
     public CommonResult changePassword(Principal principal, @RequestBody ChangePasswordDto changePasswordDto) {
 
         String prevPw = changePasswordDto.getPrevPassword();
@@ -101,42 +131,5 @@ public class MemberController {
 
         return responseService.getSuccessResult(200, "비밀번호 변경 성공");
     }
-
-    //access token 재발급 요청
-    @PostMapping("/api/v1/members/access")
-    public SingleResult refresh(@RequestBody Map<String, String> refreshRequest) {
-        String refreshToken = refreshRequest.get("refreshToken");
-        String username;
-        Map<String, String> result = new HashMap<>();
-
-        try {
-            username = jwtUtil.getUsernameFromToken(refreshToken);
-        } catch (ExpiredJwtException e) {
-            throw new InvalidAuthenticationTokenException("refreshToken이 만료되었습니다.");
-        }
-
-        Token token = tokenRedisRepository.findById(username).orElseThrow(InvalidAuthenticationTokenException::new);
-        String refreshTokenfromDb = token.getRefreshToken();
-        Member member = memberService.findByUserId(username);
-
-        //refreshToken 유효성 검사
-        if (refreshToken.equals(refreshTokenfromDb)) {
-            String newAccessToken = jwtUtil.generateAccessToken(username, member.getRoles().stream()
-                    .map(Enum::name)
-                    .collect(Collectors.toSet()));
-
-            //한번 사용한 refresh토큰은 폐기하고 새로운 refresh 토큰 발급
-            String newRefreshToken = jwtUtil.generateRefreshToken(username);
-            Token newToken = new Token(username, newRefreshToken);
-            tokenRedisRepository.save(newToken);
-            
-            result.put("accessToken", newAccessToken);
-            result.put("refreshToken", newRefreshToken);
-            return responseService.getSingleResult(result);
-        } else {
-            throw new InvalidAuthenticationTokenException();
-        }
-    }
-
 
 }

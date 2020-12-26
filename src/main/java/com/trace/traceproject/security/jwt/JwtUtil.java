@@ -122,9 +122,9 @@ public class JwtUtil {
 
     //validate token
     public Boolean validateToken(String token) {
-        try{
+        try {
             return !isTokenExpired(token);
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

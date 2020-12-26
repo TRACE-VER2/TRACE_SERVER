@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,7 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtUtil jwtUtil;
-    private final RedisTemplate<String, Object> redisTemplate;
+//    private final RedisTemplate<String, Object> redisTemplate;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     //암호화에 필요한 PasswordEncoder를 Bean 등록
     @Bean
@@ -62,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //UsernamePasswordAuthenticationFilter대신 직접 정의한 JwtAuthenticationFilter로 대체
                 //동작 방식은 UsernamePasswordAuthenticationFilter랑 비슷하게 정의함
-                    .addFilterAt(new JwtAuthenticationFilter(jwtUtil, redisTemplate), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterAt(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 }

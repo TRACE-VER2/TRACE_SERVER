@@ -16,6 +16,9 @@ import java.nio.file.Paths;
 
 import static org.springframework.http.MediaType.*;
 
+/**
+ * S3 연동 방식으로 바꿔서 더이상 사용안함
+ */
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin

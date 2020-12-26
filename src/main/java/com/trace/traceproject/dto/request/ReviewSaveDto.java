@@ -1,8 +1,6 @@
 package com.trace.traceproject.dto.request;
 
-import com.trace.traceproject.domain.Building;
-import com.trace.traceproject.domain.Member;
-import com.trace.traceproject.domain.Review;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.trace.traceproject.domain.enums.BugStatus;
 import com.trace.traceproject.domain.enums.GoodBadStatus;
 import com.trace.traceproject.domain.enums.NoiseStatus;
@@ -11,38 +9,49 @@ import com.trace.traceproject.dto.ReviewInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.YearMonth;
 
 @Data
 @AllArgsConstructor
 @Builder
 public class ReviewSaveDto {
-    private String userId;
     private Long buildingId;
-    private String roomNumer;
+    private String roomNumber;
     private String rentType;
     private int deposit;
     private int monthlyRent;
     private int score;
     private int area;
-    private LocalDateTime livingStart;
-    private LocalDateTime livingEnd;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd") //GET 요청시
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM", timezone = "Asia/Seoul") //POST 요청시
+    private LocalDate livingStart;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd") //GET 요청시
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM", timezone = "Asia/Seoul") //POST 요청시
+    private LocalDate livingEnd;
+
     private boolean remodeled;
     private String waterPressure;
     private String lighting;
     private String frozen;
     private String bug;
     private String noise;
-    private String option;
+    private String options;
     private String nearBy;
     private String trueStory;
     private String contact;
-    private LocalDateTime durationStart;
-    private LocalDateTime durationEnd;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd") //GET 요청시
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul") //POST 요청시
+    private LocalDate durationStart;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd") //GET 요청시
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul") //POST 요청시
+    private LocalDate durationEnd;
 /*
     public Review toEntity(Member member, Building building) {
         return Review.builder()
@@ -73,7 +82,7 @@ public class ReviewSaveDto {
 
     public ReviewInfo getReviewInfo() {
         return ReviewInfo.builder()
-                .roomNumber(roomNumer)
+                .roomNumber(roomNumber)
                 .rentType(RentType.valueOf(rentType))
                 .deposit(deposit)
                 .monthlyRent(monthlyRent)
@@ -86,7 +95,7 @@ public class ReviewSaveDto {
                 .lighting(GoodBadStatus.valueOf(lighting))
                 .bug(BugStatus.valueOf(bug))
                 .noise(NoiseStatus.valueOf(noise))
-                .option(option)
+                .options(options)
                 .nearBy(nearBy)
                 .trueStory(trueStory)
                 .contact(contact)

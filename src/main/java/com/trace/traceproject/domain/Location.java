@@ -19,4 +19,9 @@ public class Location extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     @Column(unique = true)
     private LocationStatus name;
+
+    //Test용 생성자
+    public Location(LocationStatus name) {
+        this.name = name;
+    }
 }

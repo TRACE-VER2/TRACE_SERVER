@@ -9,7 +9,10 @@ import com.trace.traceproject.dto.request.ReviewUpdateDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +53,8 @@ public class Review extends BaseTimeEntity{
 
     private int area; //방 크기
 
-    private LocalDateTime livingStart; //거주 시작 기간
-    private LocalDateTime livingEnd; //거주 완료 기간
+    private LocalDate livingStart; //거주 시작 기간
+    private LocalDate livingEnd; //거주 완료 기간
 
     private boolean remodeled; //리모델링 여부
 
@@ -70,8 +73,9 @@ public class Review extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private NoiseStatus noise; //소음 여부
 
+    //그냥 option은 mysql 예약어라 ddl 자동 생성 하면 오류 발생 (mariadb 쓰면 상관없음)
     @Column(columnDefinition = "TEXT")
-    private String option; //옵션 설명명
+    private String options; //옵션 설명명
 
     @Column(columnDefinition = "TEXT")
     private String nearBy; //주변 시설
@@ -85,9 +89,9 @@ public class Review extends BaseTimeEntity{
     
     private String contact; //연락처
 
-    private LocalDateTime durationStart; //유지 시작 기간
+    private LocalDate durationStart; //유지 시작 기간
 
-    private LocalDateTime durationEnd;// 유지 완료 기간
+    private LocalDate durationEnd;// 유지 완료 기간
 
     /**
      * 연관관계 편의 메서드
@@ -118,7 +122,7 @@ public class Review extends BaseTimeEntity{
         review.frozen = info.getFrozen();
         review.bug = info.getBug();
         review.noise = info.getNoise();
-        review.option = info.getOption();
+        review.options = info.getOptions();
         review.nearBy = info.getNearBy();
         review.trueStory = info.getTrueStory();
         review.contact = info.getContact();
@@ -139,7 +143,7 @@ public class Review extends BaseTimeEntity{
      */
     public void changeReview(ReviewUpdateDto reviewUpdateDto) {
         this.roomNumber = reviewUpdateDto.getRoomNumer();
-        //this.image = reviewUpdateDto.getImage();
+//        this.image = reviewUpdateDto.getImage();
         this.rentType = RentType.valueOf(reviewUpdateDto.getRentType());
         this.deposit = reviewUpdateDto.getDeposit();
         this.monthlyRent = reviewUpdateDto.getMonthlyRent();
@@ -153,7 +157,7 @@ public class Review extends BaseTimeEntity{
         this.frozen = GoodBadStatus.valueOf(reviewUpdateDto.getFrozen());
         this.bug = BugStatus.valueOf(reviewUpdateDto.getBug());
         this.noise = NoiseStatus.valueOf(reviewUpdateDto.getNoise());
-        this.option = reviewUpdateDto.getOption();
+        this.options = reviewUpdateDto.getOptions();
         this.nearBy = reviewUpdateDto.getNearBy();
         this.trueStory = reviewUpdateDto.getTrueStory();
         this.contact = reviewUpdateDto.getContact();

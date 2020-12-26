@@ -8,10 +8,7 @@ import com.trace.traceproject.service.MemberService;
 import com.trace.traceproject.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +16,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin
+@RequestMapping("/api/v1/mail")
 public class MailController {
 
     private final MailUtil mailUtil;
@@ -27,7 +25,7 @@ public class MailController {
     private final ResponseService responseService;
 
     //인증 이메일 전송
-    @GetMapping("/api/v1/mail/verification")
+    @GetMapping("/verification")
     public SingleResult mailVerification(@RequestParam("mail") String mail) {
         Map<String, String> result = new HashMap<>();
 
@@ -38,7 +36,7 @@ public class MailController {
     }
 
     //비밀번호 찾기 이메일 전송
-    @GetMapping("/api/v1/mail/password")
+    @GetMapping("/password")
     public SingleResult findPassword(@RequestParam("userId") String userId, @RequestParam("name") String name,
                                        @RequestParam("phoneNum") String phoneNum) {
         Map<String, String> result = new HashMap<>();

@@ -35,10 +35,10 @@ public class ReviewService {
     private final S3Uploader s3Uploader;
 
     @Transactional
-    public Long save(List<MultipartFile> files, ReviewSaveDto reviewSaveDto) {
+    public Long save(List<MultipartFile> files, String userId, ReviewSaveDto reviewSaveDto) {
         if(files == null || files.isEmpty()) files = new ArrayList<>();
 
-        Member member = memberRepository.findByUserId(reviewSaveDto.getUserId())
+        Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(()-> new NoSuchEntityException("유효하지 않은 회원id 입니다."));
         Building building = buildingRepository.findById(reviewSaveDto.getBuildingId())
                 .orElseThrow(() -> new NoSuchEntityException("유효하지 않은 빌딩입니다."));
