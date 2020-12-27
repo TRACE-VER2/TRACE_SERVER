@@ -72,7 +72,7 @@ public class MemberController {
     }
 
     @GetMapping("/logout")
-//    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public CommonResult logout(@RequestHeader("Authorization") String token) {//헤더에서 accessToken 가져옴
         //Bearer 제거
         String accessToken = token.substring(7);
@@ -110,7 +110,8 @@ public class MemberController {
      * Authentication도 인자로 받을 수 있음
      * @AuthenticationPrincipal 어노테이션으로 어디에서든 인증된 사용자 정보 받을 수 있음
      */
-    @PostMapping("/password")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PatchMapping("/password")
     public CommonResult changePassword(Principal principal, @RequestBody ChangePasswordDto changePasswordDto) {
 
         String prevPw = changePasswordDto.getPrevPassword();
@@ -130,6 +131,17 @@ public class MemberController {
         memberService.changePassword(member.getId(), passwordEncoder.encode(changedPw));
 
         return responseService.getSuccessResult(200, "비밀번호 변경 성공");
+    }
+
+    // 회원 탈퇴
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @DeleteMapping
+    public CommonResult withdrawal(Principal principal) {
+        String userId = principal.getName();
+
+        memberService.deleteByUserId(userId);
+
+        return responseService.getSuccessResult(200, "회원 탈퇴 성공");
     }
 
 }

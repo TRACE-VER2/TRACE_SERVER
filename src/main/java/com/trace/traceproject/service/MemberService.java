@@ -86,6 +86,11 @@ public class MemberService implements UserDbService {
         member.changePassword(password);
     }
 
+    @Transactional
+    public void deleteByUserId(String userId) {
+        memberRepository.deleteByUserId(userId);
+    }
+
     //security context에 저장할 userInfo 불러오는 메서드
     @Override
     public UserInfo getUserInfo(String userId) {

@@ -22,9 +22,23 @@ public class InitDb implements CommandLineRunner {
     private final ImageRepository imageRepository;
     private final PasswordEncoder passwordEncoder;
     private final LocationRepository locationRepository;
+    private final PreferenceRepository preferenceRepository;
 
     @Override
     public void run(String... args) throws Exception {
+
+        Preference p1 = new Preference(Tag.CHEAP);
+        Preference p2 = new Preference(Tag.LARGE);
+        Preference p3 = new Preference(Tag.NO_BUG);
+        Preference p4 = new Preference(Tag.QUIET);
+        Preference p5 = new Preference(Tag.SUNNY);
+        preferenceRepository.save(p1);
+        preferenceRepository.save(p2);
+        preferenceRepository.save(p3);
+        preferenceRepository.save(p4);
+        preferenceRepository.save(p5);
+
+
         Member member1 = new Member("minso", passwordEncoder.encode("1234"), "김민수", "minso@naver.com", "01012344567");
         memberRepository.save(member1);
         Member member2 = new Member("sooyoung", passwordEncoder.encode("1234"), "이수영", "sooyoung@naver.com", "01032454567");

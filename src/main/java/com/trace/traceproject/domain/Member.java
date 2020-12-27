@@ -44,6 +44,8 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
+
+
     @Builder
     public Member(String userId, String password, String name, String email, String phoneNum) {
         this.userId = userId;
