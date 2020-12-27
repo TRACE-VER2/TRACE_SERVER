@@ -2,6 +2,7 @@
 
 REPOSITORY=/home/ec2-user/app/step1
 PROJECT_NAME=TRACE_SERVER
+PROCESS_NAME=traceproject
 
 cd $REPOSITORY/$PROJECT_NAME/
 
@@ -9,9 +10,13 @@ echo "> Git Pull"
 
 git pull
 
+echo "> ./gradlew 실행 권한 부여"
+
+chmod +x gradlew
+
 echo "> 프로젝트 Build 시작"
 
-./gradlew build
+./gradlew build -x test
 
 echo "> step1 디렉토리 이동"
 
@@ -23,7 +28,7 @@ cp $REPOSITORY/$PROJECT_NAME/build/libs/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 
-CURRENT_PID=$(pgrep -f ${PROJECT_NAME}*.jar)
+CURRENT_PID=$(pgrep -f ${PROCESS_NAME}*.jar)
 
 echo "현재 구동 중인 애플리케이션 pid: $CURRENT_PID"
 
