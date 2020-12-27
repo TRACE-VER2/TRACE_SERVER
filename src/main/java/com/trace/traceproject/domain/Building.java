@@ -27,10 +27,10 @@ public class Building extends BaseTimeEntity{
     
     private Integer oneRoomPrice;
 
-    private LocalDateTime completionDate;
+    private String completionDate;
 
     @Builder
-    public Building(Location location, String address, String lotNumber, Integer oneRoomPrice, LocalDateTime completionDate) {
+    public Building(Location location, String address, String lotNumber, Integer oneRoomPrice, String completionDate) {
         this.location = location;
         this.address = address;
         this.lotNumber = lotNumber;

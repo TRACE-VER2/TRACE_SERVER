@@ -14,6 +14,7 @@
 //import org.springframework.data.domain.PageRequest;
 //import org.springframework.data.domain.Slice;
 //import org.springframework.data.domain.Sort;
+//import org.springframework.test.context.ActiveProfiles;
 //import org.springframework.transaction.annotation.Transactional;
 //
 //import javax.persistence.EntityManager;
@@ -22,6 +23,7 @@
 //
 //import static org.assertj.core.api.Assertions.*;
 //
+//@ActiveProfiles(profiles = {"test"})
 //@SpringBootTest
 //@Transactional
 ////@Rollback(value = false)

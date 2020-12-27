@@ -17,8 +17,7 @@ public class BuildingDto {
     private String address;//지번주소 (동까지)
     private String lotNumber;//지번
     private Integer oneRoomPrice;
-    @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private LocalDateTime completionDate;
+    private String completionDate;
 
     public BuildingDto(Building building) {
         this.id = building.getId();

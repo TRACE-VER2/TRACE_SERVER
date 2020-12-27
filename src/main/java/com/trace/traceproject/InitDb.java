@@ -37,9 +37,9 @@ public class InitDb implements CommandLineRunner {
         locationRepository.save(location2);
         locationRepository.save(location3);
 
-        Building building1 = new Building(location1, "서울시 성북구 동선동", "11-2",8, LocalDateTime.now());
+        Building building1 = new Building(location1, "서울시 성북구 동선동", "11-2",8, "1960");
         buildingRepository.save(building1);
-        Building building2 = new Building(location2, "서울시 노원구 중계동","71-3",10, LocalDateTime.now());
+        Building building2 = new Building(location2, "서울시 노원구 중계동","71-3",10, "1987");
         buildingRepository.save(building2);
 
 
@@ -100,7 +100,7 @@ public class InitDb implements CommandLineRunner {
             Building building = Building.builder()
                     .address("서울시 노원구 중계" + i + "동")
                     .lotNumber(String.valueOf(i))
-                    .completionDate(LocalDateTime.now())
+                    .completionDate("1987")
                     .location(location1)
                     .build();
 
@@ -111,7 +111,7 @@ public class InitDb implements CommandLineRunner {
             Building building = Building.builder()
                     .address("서울시 종로구 명륜" + i + "가")
                     .lotNumber(String.valueOf(i))
-                    .completionDate(LocalDateTime.now())
+                    .completionDate("1994")
                     .location(location2)
                     .build();
 
@@ -122,7 +122,7 @@ public class InitDb implements CommandLineRunner {
             Building building = Building.builder()
                     .address("서울시 강북구 도봉" + i + "동")
                     .lotNumber(String.valueOf(i))
-                    .completionDate(LocalDateTime.now())
+                    .completionDate("1960")
                     .location(location3)
                     .build();
 

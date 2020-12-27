@@ -93,6 +93,7 @@ public class ReviewSaveDto {
                 .remodeled(remodeled)
                 .waterPressure(GoodBadStatus.valueOf(waterPressure))
                 .lighting(GoodBadStatus.valueOf(lighting))
+                .frozen(GoodBadStatus.valueOf(frozen))
                 .bug(BugStatus.valueOf(bug))
                 .noise(NoiseStatus.valueOf(noise))
                 .options(options)
