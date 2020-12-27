@@ -2,6 +2,7 @@ package com.trace.traceproject.util;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -31,17 +33,22 @@ public class S3Uploader {
     private String bucket;
 
     //dirName은 S3에 생성된 디렉터리를 나타냄
-    public String upload(MultipartFile multipartFile, String dirName) throws IOException,
-            UnsupportedEncodingException, NoSuchAlgorithmException {
+    public String upload(MultipartFile multipartFile, String filename, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
 
-        return upload(uploadFile, dirName);
+        return upload(uploadFile, filename, dirName);
     }
 
-    private String upload(File uploadFile, String dirName) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    //S3에 올라간 파일 삭제
+    public void delete(String filename, String dirName) {
+        String fileName = dirName + "/" + filename;
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+    }
+
+    private String upload(File uploadFile, String filename, String dirName) {
         //파일 이름 중복 방지 (MD5Generator로 파일이름 인코딩)
-        String fileName = dirName + "/" + new MD5Generator(uploadFile.getName());
+        String fileName = dirName + "/" + filename;
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile); //Multipartfile -> File로 전환되면서 로컬에 파일 생성된 것을 삭제
         return uploadImageUrl;

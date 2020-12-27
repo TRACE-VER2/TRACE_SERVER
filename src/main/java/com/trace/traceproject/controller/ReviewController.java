@@ -46,7 +46,7 @@ public class ReviewController {
     @GetMapping
     public CommonResult findById(@RequestParam(name = "buildingId", required = false) Long buildingId,
                                  @RequestParam(name = "userId", required = false) String userId,
-                                 @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) throws IOException {
+                                 @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
         if(buildingId != null && userId == null){
             Slice<Review> buildingReview = reviewService.findBuildingReview(buildingId, pageable);
             return responseService.getSingleResult(buildingReview.map(ReviewDto::new));
@@ -58,5 +58,18 @@ public class ReviewController {
         }
 
         return responseService.getFailResult(400, "파라미터로 제대로 된 값이 전달되지 않았습니다.");
+    }
+
+    @DeleteMapping("/{id}")
+    public CommonResult delete(Principal principal,@PathVariable("id") Long id) {
+        String userId = principal.getName();
+        Review review = reviewService.findById(id);
+
+        //게시글 작성자만 삭제 가능
+        if(!review.getMember().getUserId().equals(userId)){
+            new IllegalStateException("해당 리소스를 삭제하기 위한 권한이 없습니다.");
+        }
+        reviewService.delete(id);
+        return responseService.getSuccessResult();
     }
 }

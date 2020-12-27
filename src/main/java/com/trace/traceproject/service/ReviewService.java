@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,6 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final BuildingRepository buildingRepository;
     private final MemberRepository memberRepository;
-    private final ImageRepository imageRepository;
     private final S3Uploader s3Uploader;
 
     @Transactional
@@ -49,6 +49,7 @@ public class ReviewService {
 
         Review review = Review.createReview(reviewSaveDto.getReviewInfo(), member, building, images);
 
+        //영속성 전이로 인해 review save되는 순간 image들도 save됨
         return reviewRepository.save(review).getId();
     }
 
@@ -57,9 +58,10 @@ public class ReviewService {
         for (MultipartFile file : files) {
             try {
                 String origFilename = file.getOriginalFilename();
-                String filename = new MD5Generator(origFilename).toString();
+                //파일 이름 중복 방지
+                String filename = origFilename + LocalDateTime.now() +LocalDateTime.now().getNano();
                 //s3버킷의 images 폴더에 이미지 저장
-                String filePath = s3Uploader.upload(file, "images");
+                String filePath = s3Uploader.upload(file, filename, "images");
 
 /*
                 //로컬 저장소에 저장하는 방식
@@ -83,7 +85,8 @@ public class ReviewService {
                         .filePath(filePath)
                         .build();
 
-                imageRepository.save(image);
+                //영속성 전이 사용함으로 인해 해줄필요 없어짐
+                //imageRepository.save(image);
                 images.add(image);
             } catch (Exception e) {
                 e.getStackTrace();
@@ -114,5 +117,17 @@ public class ReviewService {
     //건물에 달린 리뷰 목록 조회(페이징 처리)
     public Slice<Review> findBuildingReview(Long buildingId, Pageable pageable) {
         return reviewRepository.findByBuildingId(buildingId, pageable);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new NoSuchEntityException("유효하지 않은 리뷰 id입니다."));
+
+        //리뷰에 딸린 s3업로드 이미지 제거
+        review.getImages().forEach(img -> s3Uploader.delete(img.getFilename(), "images"));
+
+        //리뷰 삭제 (영속성 전이(cascade)로 인해 image 엔티티들까지 같이 삭제)
+        reviewRepository.deleteById(id);
     }
 }
