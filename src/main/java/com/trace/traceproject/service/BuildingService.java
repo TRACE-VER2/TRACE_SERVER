@@ -35,4 +35,8 @@ public class BuildingService {
     public Slice<Building> findAll(Pageable pageable) {
         return buildingRepository.findAll(pageable);
     }
+
+    public Slice<Building> findByAddressAndLotNumber(String address, String lotNumber, Pageable pageable) {
+        return buildingRepository.findByAddressAndLotNumber(address, lotNumber, pageable);
+    }
 }

@@ -19,8 +19,8 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
     @Query("select b from Building b where b.location.name = :locationName")
     Slice<Building> findByLocationName(@Param("locationName") LocationStatus locationName, Pageable pageable);
 
-//    @EntityGraph(attributePaths = {"location"})
-//    @Query("select b from Building b where b.address like '%'||:address||'%' and b.lobNumber like '%'||:lobNumber||'%'")
-//    Slice<Building> findByAddressAndLobNumber(@Param("address") String address, @Param("lobNumber") String lobNumber);
+    @EntityGraph(attributePaths = {"location"})
+    @Query("select b from Building b where b.address like %:address% and b.lotNumber like %:lotNumber%")
+    Slice<Building> findByAddressAndLotNumber(@Param("address") String address, @Param("lotNumber") String lotNumber, Pageable pageable);
 
 }
