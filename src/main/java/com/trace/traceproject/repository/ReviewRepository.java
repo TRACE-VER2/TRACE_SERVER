@@ -9,11 +9,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    
+
+    @EntityGraph(attributePaths = {"images"})
+    @Override
+    Optional<Review> findById(Long id);
+
     //회원별 리뷰 조회
-    @EntityGraph(attributePaths = {"building"})
+    @EntityGraph(attributePaths = {"building", "images"})
     @Query("select r from Review r where r.member.userId = :userId")
     Slice<Review> findByUserId(@Param("userId") String userId, Pageable pageable);
 

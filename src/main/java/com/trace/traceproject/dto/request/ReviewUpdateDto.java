@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
@@ -16,7 +19,7 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @AllArgsConstructor
 @Builder
 public class ReviewUpdateDto {
-    private Long reviewId;
+    private List<Long> deletedImages;
     private String roomNumer;
     private String rentType;
     private int deposit;
@@ -28,8 +31,10 @@ public class ReviewUpdateDto {
      * Request : Get - DateTimeFormat만 사용가능 / Post - JsonFormat이 우선 (둘다 사용가능하나, 두개 동시에 있으면 JsonFomat만 적용)
      * Response : JsonFormat만 사용가능
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd") //GET 요청시
     @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate livingStart;
+    @DateTimeFormat(pattern = "yyyy-MM-dd") //GET 요청시
     @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate livingEnd;
 
@@ -44,8 +49,10 @@ public class ReviewUpdateDto {
     private String trueStory;
     private String contact;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd") //GET 요청시
     @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate durationStart;
+    @DateTimeFormat(pattern = "yyyy-MM-dd") //GET 요청시
     @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate durationEnd;
 }

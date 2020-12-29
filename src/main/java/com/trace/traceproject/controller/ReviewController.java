@@ -1,9 +1,11 @@
 package com.trace.traceproject.controller;
 
 import com.trace.traceproject.domain.Review;
+import com.trace.traceproject.dto.request.ReviewUpdateDto;
 import com.trace.traceproject.dto.response.ReviewDto;
 import com.trace.traceproject.dto.request.ReviewSaveDto;
 import com.trace.traceproject.dto.response.model.CommonResult;
+import com.trace.traceproject.service.ImageService;
 import com.trace.traceproject.service.ResponseService;
 import com.trace.traceproject.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import java.util.List;
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
+    private final ImageService imageService;
     private final ResponseService responseService;
 
     @PostMapping
@@ -47,7 +50,7 @@ public class ReviewController {
     public CommonResult findById(@RequestParam(name = "buildingId", required = false) Long buildingId,
                                  @RequestParam(name = "userId", required = false) String userId,
                                  @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        if(buildingId != null && userId == null){
+        if (buildingId != null && userId == null) {
             Slice<Review> buildingReview = reviewService.findBuildingReview(buildingId, pageable);
             return responseService.getSingleResult(buildingReview.map(ReviewDto::new));
         }
@@ -61,15 +64,35 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public CommonResult delete(Principal principal,@PathVariable("id") Long id) {
+    public CommonResult delete(Principal principal, @PathVariable("id") Long id) {
         String userId = principal.getName();
         Review review = reviewService.findById(id);
 
         //게시글 작성자만 삭제 가능
-        if(!review.getMember().getUserId().equals(userId)){
+        if (!review.getMember().getUserId().equals(userId)) {
             new IllegalStateException("해당 리소스를 삭제하기 위한 권한이 없습니다.");
         }
         reviewService.delete(id);
         return responseService.getSuccessResult();
+    }
+
+    @PatchMapping("/{id}")
+    public CommonResult update(Principal principal, @PathVariable("id") Long id,
+                               @RequestParam("images") List<MultipartFile> files, ReviewUpdateDto reviewUpdateDto) {
+        String userId = principal.getName();
+        Review review = reviewService.findById(id);
+
+        //게시글 작성자만 수정 가능
+        if (!review.getMember().getUserId().equals(userId)) {
+            new IllegalStateException("해당 리소스를 삭제하기 위한 권한이 없습니다.");
+        }
+
+        if (files == null || files.isEmpty()) {
+            files = new ArrayList<>();
+        }
+
+        reviewService.update(id, files, reviewUpdateDto);
+
+        return responseService.getSuccessResult(200, "리뷰 수정 성공");
     }
 }

@@ -21,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class S3Uploader {
+public class S3Util {
 
     /**
      * Spring Boot Cloud AWS 사용하면 S3관련 Bean 자동 생성

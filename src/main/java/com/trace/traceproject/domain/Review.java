@@ -38,7 +38,8 @@ public class Review extends BaseTimeEntity{
     
     private String roomNumber; //호수
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    //영속성 전이와 고아객체 속성 모두 적용 (image는 review에 종속적이기 때문)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Image> images = new ArrayList<>(); //방 사진
 
@@ -140,10 +141,11 @@ public class Review extends BaseTimeEntity{
      * 리뷰 수정
      * 파라미터로 다 받으면 재사용성측면에서 좋지만
      * 너무 많다면 의존성 생기더라도 dto로 전달하는 것 고려
+     * 이미지를 제외한 나머지 정보를 수정한다
      */
-    public void changeReview(ReviewUpdateDto reviewUpdateDto) {
+    public void changeReviewInfo(ReviewUpdateDto reviewUpdateDto) {
         this.roomNumber = reviewUpdateDto.getRoomNumer();
-//        this.image = reviewUpdateDto.getImage();
+//        this.image = reviewUpdateDto.getImage(); // 이미지는 따로 처리
         this.rentType = RentType.valueOf(reviewUpdateDto.getRentType());
         this.deposit = reviewUpdateDto.getDeposit();
         this.monthlyRent = reviewUpdateDto.getMonthlyRent();

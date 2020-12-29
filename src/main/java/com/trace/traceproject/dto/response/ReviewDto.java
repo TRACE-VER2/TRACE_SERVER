@@ -16,6 +16,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
@@ -25,10 +26,10 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @Data
 public class ReviewDto {
 
-    private Long id;
+    private Long reviewId;
     private String userId;
     private String roomNumber; //호수
-    private List<String> images = new ArrayList<>(); //방 사진 주소 목록
+    private List<ImageDto> images; //방 사진 주소 목록
     private String rentType; //전세, 월세 여부
     private int deposit; //전세, 월세 보증금
     private int monthlyRent; //월세 가격
@@ -56,10 +57,10 @@ public class ReviewDto {
 
 
     public ReviewDto(Review review) {
-        this.id = review.getId();
+        this.reviewId = review.getId();
         this.userId = review.getMember().getUserId();
         this.roomNumber = review.getRoomNumber();
-        review.getImages().forEach(e -> this.images.add(e.getFilePath()));
+        this.images = review.getImages().stream().map(ImageDto::new).collect(Collectors.toList());
         this.rentType = review.getRentType().getValue();
         this.deposit = review.getDeposit();
         this.monthlyRent = review.getMonthlyRent();
