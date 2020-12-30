@@ -86,15 +86,16 @@ class MemberServiceTest {
         memberService.join(memberJoinDto);
 
         //when
-        MemberUpdateDto memberUpdateDto = new MemberUpdateDto("syleemk","01034564567");
+        MemberUpdateDto memberUpdateDto = new MemberUpdateDto();
+        memberUpdateDto.setPhoneNum("01012349875");
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("QUIET");
         arrayList.add("LARGE");
         memberUpdateDto.setPreferences(arrayList);
-        memberService.update(memberUpdateDto);
+        memberService.update("syleemk", memberUpdateDto);
 
         //then
-        Member findMember = memberService.findByUserId(memberUpdateDto.getUserId());
+        Member findMember = memberService.findByUserId("syleemk");
         assertThat(findMember.getPhoneNum()).isEqualTo(memberUpdateDto.getPhoneNum());
         findMember.getPreferences().forEach(System.out::println);
     }

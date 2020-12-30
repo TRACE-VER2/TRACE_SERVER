@@ -65,11 +65,13 @@ public class MemberService implements UserDbService {
                 .orElseThrow(() -> new NoSuchEntityException("유효하지 않은 이메일 주소입니다."));
     }
 
-    //회원 정보 수정
+    //회원 정보 수정 (취향, 핸드폰 번호만 수정가능)
     @Transactional
-    public void update(MemberUpdateDto memberUpdateDto) {
-        Member member = memberRepository.findByUserId(memberUpdateDto.getUserId())
+    public void update(String userId, MemberUpdateDto memberUpdateDto) {
+        Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(()->new NoSuchEntityException("유효하지 않은 회원 id입니다."));
+
+
         member.changeUserInfo(memberUpdateDto.getPhoneNum(),
                 memberUpdateDto.getPreferences().stream()
                             .map(Tag::valueOf)

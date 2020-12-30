@@ -5,6 +5,7 @@ import com.trace.traceproject.domain.Member;
 import com.trace.traceproject.dto.Token;
 import com.trace.traceproject.dto.request.ChangePasswordDto;
 import com.trace.traceproject.dto.request.MemberJoinDto;
+import com.trace.traceproject.dto.request.MemberUpdateDto;
 import com.trace.traceproject.dto.response.LoginResponseDto;
 import com.trace.traceproject.dto.response.model.CommonResult;
 import com.trace.traceproject.dto.response.model.SingleResult;
@@ -131,6 +132,17 @@ public class MemberController {
         memberService.changePassword(member.getId(), passwordEncoder.encode(changedPw));
 
         return responseService.getSuccessResult(200, "비밀번호 변경 성공");
+    }
+
+    //회원 정보 수정
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PatchMapping
+    public CommonResult update(Principal principal, @RequestBody MemberUpdateDto memberUpdateDto) {
+        String userId = principal.getName();
+        log.info("수정 시작");
+        memberService.update(userId, memberUpdateDto);
+        log.info("수정 끝");
+        return responseService.getSuccessResult(200, "회원 정보 수정 성공");
     }
 
     // 회원 탈퇴
