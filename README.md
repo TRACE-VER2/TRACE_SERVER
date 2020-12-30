@@ -21,17 +21,17 @@
 ### 🤼 역할 분담
 
 - 이수영 :
-    - api 서버 구축 
     - 회원가입, 로그인 기능 구현
     - JWT 기반 인증 인가 구현
-    - ERD & Entity Class Diagram 작성 
+    - ERD 작성 
     - API 설계
     - 기본 CRUD API 구현
     - AWS S3 버킷 연결
-    - 배포 스크립트 작성
+    - 배포 스크립트 작성 및 배포
 - 배준호 : 
-    - AWS EC2 배포 환경 구축 
-    - EC2 DNS 연결 
+    - AWS EC2 배포 환경 구축
+    - AWS RDS 인스턴스 생성
+    - 도메인 AWS 네임서버 연결
     - DB에 건물 데이터 INSERT
 - 배지홍 : 
     - 공공 API를 통해 얻은 건물 정보 가공 및 데이터 분석
@@ -102,17 +102,19 @@ Ex)
 
 ![서버 아키텍처](https://user-images.githubusercontent.com/40594564/102990179-4dd35200-455a-11eb-8f82-d07ea7c5f359.png)
 
-## 📊 ERD & 엔티티 클래스 다이어그램
+## 📊 ERD
 
+### 관계형 DB 테이블
 ![erd](https://user-images.githubusercontent.com/40594564/103280665-4c9b9c80-4a14-11eb-8959-8c0b334e9b7d.png)
 
+### JPA 엔티티 클래스 
 ![entityManagerFactory(EntityManagerFactoryBuilder)](https://user-images.githubusercontent.com/40594564/103279971-89669400-4a12-11eb-8cbb-2c52a9a279e7.png)
 
 ## 🖨️API 명세서
 
 ### 스프레드 시트
 
-![api 명세서](https://user-images.githubusercontent.com/40594564/103280797-a13f1780-4a14-11eb-983b-a53d4d3c71aa.jpg)
+![api 명세서](https://user-images.githubusercontent.com/40594564/103334689-b029d680-4ab5-11eb-825e-9e65d76279df.jpg)
 
 ### API 명세서
 
