@@ -21,6 +21,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -49,7 +51,8 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public SingleResult login(@RequestBody Map<String, String> loginRequest) {
+    public SingleResult login(@RequestBody Map<String, String> loginRequest,
+                              HttpServletResponse response) {
         Member member = memberService.findByUserId(loginRequest.get("userId"));
 
         //비밀번호 불일치
@@ -68,8 +71,14 @@ public class MemberController {
         Token token = new Token(member.getUserId(), refresh);
         tokenRedisRepository.save(token);
 
+        //refresh토큰을 response cookie로 넣어줌
+        Cookie cookie = new Cookie("refreshToken", refresh);
+        cookie.setMaxAge(60*60*24*7);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+        
         //access + refresh 토큰 응답
-        return responseService.getSingleResult(new LoginResponseDto(access, refresh));
+        return responseService.getSingleResult(new LoginResponseDto(access));
     }
 
     @GetMapping("/logout")
