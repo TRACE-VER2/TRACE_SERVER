@@ -19,17 +19,19 @@ public class Member extends BaseTimeEntity{
     @Column(name = "member_id")
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String userId;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String phoneNum;
 
     @ManyToMany(fetch = FetchType.LAZY)
