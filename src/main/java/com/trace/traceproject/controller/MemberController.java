@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin("*")
+@CrossOrigin
 @RequestMapping("/api/v1/members")
 public class MemberController {
     private final PasswordEncoder passwordEncoder;

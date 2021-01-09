@@ -21,7 +21,7 @@ import static org.springframework.http.MediaType.*;
  */
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin
 public class ImageController {
 
     private final ImageService imageService;

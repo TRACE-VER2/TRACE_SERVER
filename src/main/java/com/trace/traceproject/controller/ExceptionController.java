@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/exception")
-@CrossOrigin("*")
+@CrossOrigin
 public class ExceptionController {
 
     @GetMapping("/entrypoint")

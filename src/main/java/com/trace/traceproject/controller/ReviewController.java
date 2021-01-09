@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin
 @PreAuthorize("hasRole('ROLE_USER')")
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
