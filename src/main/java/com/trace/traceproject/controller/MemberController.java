@@ -74,7 +74,6 @@ public class MemberController {
         //refresh토큰을 response cookie로 넣어줌
         Cookie cookie = new Cookie("refreshToken", refresh);
         cookie.setMaxAge(60*60*24*7);
-        cookie.setPath("/api/v1/auth/access");
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
         
