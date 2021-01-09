@@ -49,6 +49,7 @@ public class MemberController {
         return responseService.getSuccessResult(200, "회원가입 성공");
     }
 
+    @CrossOrigin(allowCredentials = "true")
     @PostMapping("/login")
     public SingleResult login(@RequestBody Map<String, String> loginRequest,
                               HttpServletResponse response) {
