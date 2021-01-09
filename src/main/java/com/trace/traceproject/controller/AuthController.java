@@ -153,6 +153,7 @@ public class AuthController {
             cookie.setValue(newRefreshToken);
             cookie.setMaxAge(60*60*24*7);
             cookie.setHttpOnly(true);
+            cookie.setPath("/");
             response.addCookie(cookie);
 
             //새로 발급된 access 토큰은 response body에 넣어줌
