@@ -39,22 +39,25 @@ public class AuthController {
     //등록 여부 검사
     @GetMapping("/registered")
     public CommonResult confirmRegistered(@RequestParam(name = "userId", required = false) String userId,
+                                          @RequestParam(name ="email", required = false) String email,
                                           @RequestParam(name = "name", required = false) String name,
                                           @RequestParam(name = "phoneNum", required = false) String phoneNum) {
-        if (name == null && phoneNum == null && userId != null) {
-            try {
-                Member member = memberService.findByUserId(userId);
-            } catch (Exception e) {
-                return responseService.getSuccessResult(200, "사용가능한 Id입니다.");
-            }
+        //userId 중복 검사
+        if (name == null && phoneNum == null && email == null && userId != null) {
+            Member member = memberService.findByUserId(userId);
+            return responseService.getSuccessResult(200, "사용가능한 Id입니다.");
         }
 
-        if (userId == null && name != null && phoneNum != null) {
-            try {
-                Member member = memberService.findByNameAndPhoneNum(name, phoneNum);
-            } catch (Exception e) {
-                return responseService.getSuccessResult(200, "회원가입 가능합니다.");
-            }
+        //회원 가입 여부 검사
+        if (userId == null && email == null && name != null && phoneNum != null) {
+            Member member = memberService.findByNameAndPhoneNum(name, phoneNum);
+            return responseService.getSuccessResult(200, "회원가입 가능합니다.");
+        }
+
+        //email 중복 검사
+        if (name == null && phoneNum == null && userId == null && email != null) {
+            Member member = memberService.findByEmail(email);
+            return responseService.getSuccessResult(200, "사용가능한 email입니다.");
         }
 
         return responseService.getFailResult(400, "파라미터로 제대로 된 값이 전달되지 않았습니다.");
@@ -126,6 +129,7 @@ public class AuthController {
         try {
             username = jwtUtil.getUsernameFromToken(refreshToken);
         } catch (ExpiredJwtException e) {
+            log.warn("refreshToken 만료");
             throw new InvalidAuthenticationTokenException("refreshToken이 만료되었습니다.");
         }
 
@@ -158,4 +162,5 @@ public class AuthController {
             throw new InvalidAuthenticationTokenException();
         }
     }
+
 }
