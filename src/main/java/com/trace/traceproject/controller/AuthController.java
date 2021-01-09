@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
+@CrossOrigin
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
@@ -114,6 +114,7 @@ public class AuthController {
     }
 
     //access token 재발급 (요청 header에 쿠키로 넣어서 요청)
+    @CrossOrigin(allowCredentials = "true")
     @GetMapping("/token")
     public SingleResult refresh(@CookieValue(value = "refreshToken", required = false) Cookie cookie,
                                 HttpServletResponse response) {
@@ -159,6 +160,7 @@ public class AuthController {
             result.put("accessToken", newAccessToken);
             return responseService.getSingleResult(result);
         } else {
+            log.warn("유효하지 않은 토큰");
             throw new InvalidAuthenticationTokenException();
         }
     }
