@@ -75,7 +75,7 @@ public class AuthController {
     }
 
     //access token 재발급 요청 (요청 바디에 넣어서 요청)
-    @PostMapping("/access")
+    @PostMapping("/token")
     public SingleResult refresh(@RequestBody Map<String, String> refreshRequest) {
         String refreshToken = refreshRequest.get("refreshToken");
         String username;
@@ -111,7 +111,7 @@ public class AuthController {
     }
 
     //access token 재발급 (요청 header에 쿠키로 넣어서 요청)
-    @GetMapping("/access")
+    @GetMapping("/token")
     public SingleResult refresh(@CookieValue(value = "refreshToken", required = false) Cookie cookie,
                                 HttpServletResponse response) {
         if (cookie == null) {
