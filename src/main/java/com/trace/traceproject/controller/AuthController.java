@@ -147,7 +147,7 @@ public class AuthController {
             //refresh 토큰을 response cookie로 넣어줌
             cookie.setValue(newRefreshToken);
             cookie.setMaxAge(60*60*24*7);
-            cookie.setPath("/api/v1/auth/access");
+            cookie.setPath("/api/v1/auth/token");
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
 
