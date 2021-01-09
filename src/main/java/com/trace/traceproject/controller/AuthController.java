@@ -13,10 +13,11 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class AuthController {
             }
         }
 
-        return responseService.getFailResult(400,"파라미터로 제대로 된 값이 전달되지 않았습니다.");
+        return responseService.getFailResult(400, "파라미터로 제대로 된 값이 전달되지 않았습니다.");
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -73,7 +74,7 @@ public class AuthController {
         return responseService.getFailResult();
     }
 
-    //access token 재발급 요청
+    //access token 재발급 요청 (요청 바디에 넣어서 요청)
     @PostMapping("/access")
     public SingleResult refresh(@RequestBody Map<String, String> refreshRequest) {
         String refreshToken = refreshRequest.get("refreshToken");
@@ -109,4 +110,52 @@ public class AuthController {
         }
     }
 
+    //access token 재발급 (요청 header에 쿠키로 넣어서 요청)
+    @GetMapping("/access")
+    public SingleResult refresh(@CookieValue(value = "refreshToken", required = false) Cookie cookie,
+                                HttpServletResponse response) {
+        if (cookie == null) {
+            log.warn("refreshToken 쿠키 누락");
+            throw new InvalidAuthenticationTokenException("refreshToken 쿠키 누락");
+        }
+
+        String refreshToken = cookie.getValue();
+        String username;
+        Map<String, String> result = new HashMap<>();
+
+        try {
+            username = jwtUtil.getUsernameFromToken(refreshToken);
+        } catch (ExpiredJwtException e) {
+            throw new InvalidAuthenticationTokenException("refreshToken이 만료되었습니다.");
+        }
+
+        Token token = tokenRedisRepository.findById(username).orElseThrow(InvalidAuthenticationTokenException::new);
+        String refreshTokenfromDb = token.getRefreshToken();
+        Member member = memberService.findByUserId(username);
+
+        //refreshToken 유효성 검사
+        if (refreshToken.equals(refreshTokenfromDb)) {
+            String newAccessToken = jwtUtil.generateAccessToken(username, member.getRoles().stream()
+                    .map(Enum::name)
+                    .collect(Collectors.toSet()));
+
+            //한번 사용한 refresh 토큰은 폐기하고 새로운 refresh 토큰 발급
+            String newRefreshToken = jwtUtil.generateRefreshToken(username);
+            Token newToken = new Token(username, newRefreshToken);
+            tokenRedisRepository.save(newToken);
+
+            //refresh 토큰을 response cookie로 넣어줌
+            cookie.setValue(newRefreshToken);
+            cookie.setMaxAge(60*60*24*7);
+            cookie.setPath("/api/v1/auth/access");
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+
+            //새로 발급된 access 토큰은 response body에 넣어줌
+            result.put("accessToken", newAccessToken);
+            return responseService.getSingleResult(result);
+        } else {
+            throw new InvalidAuthenticationTokenException();
+        }
+    }
 }

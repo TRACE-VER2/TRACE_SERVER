@@ -19,7 +19,7 @@ public class Token implements Serializable {//자바 직렬화 가능하려면 S
     @Id //key 값으로 설정
     private String username;
     private String refreshToken;
-    @TimeToLive(unit = TimeUnit.HOURS) //redis 만료시간 100일 설정
+    @TimeToLive(unit = TimeUnit.HOURS) //redis 만료시간 7일 설정
     private Integer duration = 24 * 7;
 
     public Token(String username, String refreshToken) {
