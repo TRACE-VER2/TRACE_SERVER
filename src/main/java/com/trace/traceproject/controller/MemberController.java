@@ -75,11 +75,12 @@ public class MemberController {
         Cookie cookie = new Cookie("refreshToken", refresh);
         cookie.setMaxAge(60*60*24*7);
         cookie.setHttpOnly(true);
-        cookie.setPath("/");
+        cookie.setDomain("jaggutrace.com");
+        cookie.setPath("/api/v1/auth/token");
         response.addCookie(cookie);
         
         //access + refresh 토큰 응답
-        return responseService.getSingleResult(new LoginResponseDto(access));
+        return responseService.getSingleResult(new LoginResponseDto(access, refresh));
     }
 
     @GetMapping("/logout")

@@ -153,11 +153,13 @@ public class AuthController {
             cookie.setValue(newRefreshToken);
             cookie.setMaxAge(60*60*24*7);
             cookie.setHttpOnly(true);
-            cookie.setPath("/");
+            cookie.setDomain("localhost");
+            cookie.setPath("/api/v1/auth/token");
             response.addCookie(cookie);
 
             //새로 발급된 access 토큰은 response body에 넣어줌
             result.put("accessToken", newAccessToken);
+            result.put("refreshToken", newRefreshToken);
             return responseService.getSingleResult(result);
         } else {
             log.warn("유효하지 않은 토큰");
