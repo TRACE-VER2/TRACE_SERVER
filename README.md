@@ -14,6 +14,10 @@
 
     학생 사용자들이 자유롭게 이용할 수 있는 커뮤니티 서비스 역시 제공합니다. 각자 자취를 하면서 얻은 노하우를 공유하거나 자취할 때 필요한 물품에 대한 정보를 자유롭게 공유할 수 있습니다.
 
+## 🙌🏻 트레이스 홈페이지
+
+[트레이스 홈페이지 - 제작중 (클릭)](http://www.jaggutrace.com/)
+
 ---
 
 ## 🔥SERVER - 이수영👨🏻‍💻 배준호👨🏻‍🔧 배지홍👨🏻‍🏫
@@ -31,7 +35,7 @@
 - 배준호 : 
     - AWS EC2 배포 환경 구축
     - AWS RDS 인스턴스 생성
-    - 도메인 AWS 네임서버 연결
+    - AWS Route53 이용 도메인 연결
     - DB에 건물 데이터 INSERT
 - 배지홍 : 
     - 공공 API를 통해 얻은 건물 정보 가공 및 데이터 분석
@@ -114,8 +118,8 @@ Ex)
 
 ### 스프레드 시트
 
-![api 명세서](https://user-images.githubusercontent.com/40594564/103334689-b029d680-4ab5-11eb-825e-9e65d76279df.jpg)
+![api 명세서](https://user-images.githubusercontent.com/40594564/104128822-19122800-53ad-11eb-843d-e19a21be80c3.png)
 
 ### API 명세서
 
-- [git book api 링크](https://syleemk.gitbook.io/trace/)
+- [git book api 링크](http://syleemk.gitbook.io/trace/)
