@@ -109,6 +109,7 @@ public class AuthController {
             result.put("refreshToken", newRefreshToken);
             return responseService.getSingleResult(result);
         } else {
+            log.warn("유효하지 않은 토큰");
             throw new InvalidAuthenticationTokenException();
         }
     }
@@ -154,7 +155,7 @@ public class AuthController {
             cookie.setMaxAge(60*60*24*7);
             cookie.setHttpOnly(true);
             cookie.setDomain("localhost");
-            cookie.setPath("/api/v1/auth/token");
+            cookie.setPath("/");
             response.addCookie(cookie);
 
             //새로 발급된 access 토큰은 response body에 넣어줌
@@ -163,7 +164,7 @@ public class AuthController {
             return responseService.getSingleResult(result);
         } else {
             log.warn("유효하지 않은 토큰");
-            throw new InvalidAuthenticationTokenException();
+            throw new InvalidAuthenticationTokenException("유효하지 않은 토큰입니다.");
         }
     }
 

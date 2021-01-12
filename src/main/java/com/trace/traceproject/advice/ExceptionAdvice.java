@@ -60,7 +60,11 @@ public class ExceptionAdvice {
     @ExceptionHandler(InvalidAuthenticationTokenException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public CommonResult expiredAuthenticationTokenException(HttpServletRequest request, Exception e) {
-        return responseService.getFailResult(401, "유효하지 않은 토큰입니다.");
+        String message = e.getMessage();
+        if (message == null) {
+            message = "유효하지 않은 토큰입니다.";
+        }
+        return responseService.getFailResult(401, message);
     }
 
     @ExceptionHandler(NoSuchEntityException.class)

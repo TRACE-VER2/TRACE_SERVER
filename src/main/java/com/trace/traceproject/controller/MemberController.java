@@ -76,7 +76,7 @@ public class MemberController {
         cookie.setMaxAge(60*60*24*7);
         cookie.setHttpOnly(true);
         cookie.setDomain("jaggutrace.com");
-        cookie.setPath("/api/v1/auth/token");
+        cookie.setPath("/");
         response.addCookie(cookie);
         
         //access + refresh 토큰 응답
