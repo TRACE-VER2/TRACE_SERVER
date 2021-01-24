@@ -25,13 +25,14 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin
-@PreAuthorize("hasRole('ROLE_USER')")
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
     private final ImageService imageService;
     private final ResponseService responseService;
 
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
     public CommonResult write(@RequestParam("images") List<MultipartFile> files, Principal principal, ReviewSaveDto reviewSaveDto) {
         if (files == null || files.isEmpty()) {
@@ -63,6 +64,7 @@ public class ReviewController {
         return responseService.getFailResult(400, "파라미터로 제대로 된 값이 전달되지 않았습니다.");
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/{id}")
     public CommonResult delete(Principal principal, @PathVariable("id") Long id) {
         String userId = principal.getName();
@@ -70,12 +72,13 @@ public class ReviewController {
 
         //게시글 작성자만 삭제 가능
         if (!review.getMember().getUserId().equals(userId)) {
-            new IllegalStateException("해당 리소스를 삭제하기 위한 권한이 없습니다.");
+            throw new IllegalStateException("해당 리소스를 삭제하기 위한 권한이 없습니다.");
         }
         reviewService.delete(id);
         return responseService.getSuccessResult();
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PatchMapping("/{id}")
     public CommonResult update(Principal principal, @PathVariable("id") Long id,
                                @RequestParam("images") List<MultipartFile> files, ReviewUpdateDto reviewUpdateDto) {
@@ -84,7 +87,7 @@ public class ReviewController {
 
         //게시글 작성자만 수정 가능
         if (!review.getMember().getUserId().equals(userId)) {
-            new IllegalStateException("해당 리소스를 삭제하기 위한 권한이 없습니다.");
+            throw new IllegalStateException("해당 리소스를 삭제하기 위한 권한이 없습니다.");
         }
 
         if (files == null || files.isEmpty()) {

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin
-@PreAuthorize("hasRole('ROLE_USER')")
 @RequestMapping("/api/v1/buildings")
 public class BuildingController {
 
