@@ -5,8 +5,8 @@ import com.trace.traceproject.domain.Building;
 import com.trace.traceproject.domain.enums.LocationStatus;
 import com.trace.traceproject.repository.BuildingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,19 +24,19 @@ public class BuildingService {
                 .orElseThrow(()-> new NoSuchEntityException("유효하지 않은 building id 입니다."));
     }
 
-    public Slice<Building> findByLocationId(Long locationId, Pageable pageable) {
+    public Page<Building> findByLocationId(Long locationId, Pageable pageable) {
         return buildingRepository.findByLocationId(locationId, pageable);
     }
 
-    public Slice<Building> findByLocationName(LocationStatus locationName, Pageable pageable) {
+    public Page<Building> findByLocationName(LocationStatus locationName, Pageable pageable) {
         return buildingRepository.findByLocationName(locationName, pageable);
     }
 
-    public Slice<Building> findAll(Pageable pageable) {
+    public Page<Building> findAll(Pageable pageable) {
         return buildingRepository.findAll(pageable);
     }
 
-    public Slice<Building> findByAddressAndLotNumber(String address, String lotNumber, Pageable pageable) {
+    public Page<Building> findByAddressAndLotNumber(String address, String lotNumber, Pageable pageable) {
         return buildingRepository.findByAddressAndLotNumber(address, lotNumber, pageable);
     }
 }

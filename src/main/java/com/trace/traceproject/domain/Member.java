@@ -40,6 +40,7 @@ public class Member extends BaseTimeEntity{
             inverseJoinColumns = @JoinColumn(name = "preference_id"))
     private Set<Preference> preferences = new HashSet<>();
 
+    //값 타입 컬렉션
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "role",
             joinColumns = @JoinColumn(name = "member_id"))

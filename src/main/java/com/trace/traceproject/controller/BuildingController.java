@@ -8,8 +8,8 @@ import com.trace.traceproject.dto.response.model.SingleResult;
 import com.trace.traceproject.service.BuildingService;
 import com.trace.traceproject.service.ResponseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -43,13 +43,13 @@ public class BuildingController {
         //지역별 조회
         if (location != null && address == null && lotNumber == null) {
             LocationStatus locationName = LocationStatus.valueOf(location);
-            Slice<Building> locationBuilding = buildingService.findByLocationName(locationName, pageable);
+            Page<Building> locationBuilding = buildingService.findByLocationName(locationName, pageable);
             return responseService.getSingleResult(locationBuilding.map(BuildingDto::new));
         }
 
         //주소 지번 검색
         if (location == null && address != null && lotNumber != null) {
-            Slice<Building> building = buildingService.findByAddressAndLotNumber(address, lotNumber, pageable);
+            Page<Building> building = buildingService.findByAddressAndLotNumber(address, lotNumber, pageable);
             return responseService.getSingleResult(building.map(BuildingDto::new));
         }
 

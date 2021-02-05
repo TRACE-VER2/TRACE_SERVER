@@ -9,8 +9,8 @@ import com.trace.traceproject.service.ImageService;
 import com.trace.traceproject.service.ResponseService;
 import com.trace.traceproject.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,12 +52,12 @@ public class ReviewController {
                                  @RequestParam(name = "userId", required = false) String userId,
                                  @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
         if (buildingId != null && userId == null) {
-            Slice<Review> buildingReview = reviewService.findBuildingReview(buildingId, pageable);
+            Page<Review> buildingReview = reviewService.findBuildingReview(buildingId, pageable);
             return responseService.getSingleResult(buildingReview.map(ReviewDto::new));
         }
 
         if (buildingId == null && userId != null) {
-            Slice<Review> memberReview = reviewService.findMemberReview(userId, pageable);
+            Page<Review> memberReview = reviewService.findMemberReview(userId, pageable);
             return responseService.getSingleResult(memberReview.map(ReviewDto::new));
         }
 
