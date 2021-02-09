@@ -59,7 +59,7 @@ public class InitDb implements CommandLineRunner {
 
 
         for (int i = 0; i < 50; i++) {
-            Image image = new Image(null, "orig" + i, "filename" + i, "filePath/"+ i, null);
+            Image image = new Image(null, "orig" + i, "filename" + i, "filePath/"+ i, null, building1);
             Review review = Review.builder()
                     .member(member1)
                     .building(building1)
@@ -85,7 +85,7 @@ public class InitDb implements CommandLineRunner {
         }
 
         for (int i = 50; i < 100; i++) {
-            Image image = new Image(null, "orig" + i, "filename" + i, "filePath/"+ i, null);
+            Image image = new Image(null, "orig" + i, "filename" + i, "filePath/"+ i, null, building2);
             Review review = Review.builder()
                     .member(member2)
                     .building(building2)

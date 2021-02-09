@@ -49,7 +49,6 @@ public class ReviewService {
         List<Image> images = uploadImages(files);
 
         //개인이 한 건물당 남길 수 있는 리뷰 하나로 제한?
-
         Review review = Review.createReview(reviewSaveDto.getReviewInfo(), member, building, images);
 
         //영속성 전이로 인해 review save되는 순간 image들도 save됨

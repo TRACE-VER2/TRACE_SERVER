@@ -1,11 +1,14 @@
 package com.trace.traceproject.controller;
 
 import com.trace.traceproject.domain.Building;
+import com.trace.traceproject.domain.Image;
 import com.trace.traceproject.domain.enums.LocationStatus;
 import com.trace.traceproject.dto.response.BuildingDto;
 import com.trace.traceproject.dto.response.model.CommonResult;
+import com.trace.traceproject.dto.response.model.ListResult;
 import com.trace.traceproject.dto.response.model.SingleResult;
 import com.trace.traceproject.service.BuildingService;
+import com.trace.traceproject.service.ImageService;
 import com.trace.traceproject.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,6 +28,7 @@ public class BuildingController {
 
     private final BuildingService buildingService;
     private final ResponseService responseService;
+    private final ImageService imageService;
 
     @GetMapping("/{id}")
     public SingleResult findById(@PathVariable("id") Long id) {
@@ -55,5 +62,16 @@ public class BuildingController {
 
         return responseService.getFailResult(401, "올바른 파라미터 요청이 아닙니다.");
 
+    }
+
+    @GetMapping("/{buildingId}/thumbnail")
+    public SingleResult<String> getReviewImages(@PathVariable(value = "buildingId") Long id) {
+        Building building = buildingService.findById(id);
+
+        String image = imageService.findFirstByBuilding(building)
+                .map(Image::getFilePath)
+                .orElse("");
+
+        return responseService.getSingleResult(image);
     }
 }

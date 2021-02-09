@@ -131,6 +131,7 @@ public class Review extends BaseTimeEntity{
         review.durationEnd = info.getDurationEnd();
 
         for (Image image : images) {
+            image.setBuilding(building); //해당 리뷰가 등록되는 빌딩도 같이 저장한다 (빌딩별 이미지 조회 위해서)
             review.addImage(image); //연관관계 편의 메서드
         }
 
